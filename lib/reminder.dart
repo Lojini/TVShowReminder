@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
+class Reminder extends StatefulWidget{
   @override
-  _HomePageState createState() => _HomePageState();
+  _ReminderState createState()=> _ReminderState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _ReminderState extends State<Reminder>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +16,7 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding: EdgeInsets.all(30),
                 child: Text(
-                  'Watch List',
+                  'Reminder',
                   style: TextStyle(
                       fontFamily: 'Montserrat',
                       color: Colors.white,

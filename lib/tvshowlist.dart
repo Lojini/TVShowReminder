@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
+class TvShowList extends StatefulWidget{
   @override
-  _HomePageState createState() => _HomePageState();
+  _TvShowListState createState()=> _TvShowListState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _TvShowListState extends State<TvShowList>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +16,7 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding: EdgeInsets.all(30),
                 child: Text(
-                  'Watch List',
+                  'TV Shows',
                   style: TextStyle(
                       fontFamily: 'Montserrat',
                       color: Colors.white,
