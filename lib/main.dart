@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'splash.dart';
-import 'home.dart';
+import 'bottomNavigator.dart';
 
 void main() => runApp(MyApp());
 
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       ),
       home: Splash(),
       routes: <String, WidgetBuilder>{
-        '/Home': (BuildContext context) => new HomePage()
+        '/Home': (BuildContext context) => new BottomNavigationBarPage()
       },
     );
   }
