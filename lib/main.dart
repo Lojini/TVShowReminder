@@ -5,28 +5,51 @@ import 'bottomNavigator.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
       home: Splash(),
       routes: <String, WidgetBuilder>{
         '/Home': (BuildContext context) => new BottomNavigationBarPage()
       },
+    );
+  }
+}
+
+//to reuse the widget
+class PageTheme{
+  pageTheme(String text,Widget widget,BuildContext context){
+    return new Container(
+        color:  Colors.cyan[600],
+        child:ListView(
+            children:[
+              Padding(
+                padding: EdgeInsets.all(25),
+                child: Text(
+                  text,
+                  style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25
+                  ),
+                ),
+              ),
+              Container(
+                  height: MediaQuery.of(context).size.height - 175.0,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(75.0)),
+                  ),
+                  child: widget
+              )
+            ]
+        )
     );
   }
 }

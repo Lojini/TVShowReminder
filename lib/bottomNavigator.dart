@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:tv_reminder/help.dart';
-import 'package:tv_reminder/home.dart';
+import 'package:tv_reminder/watchlist.dart';
 import 'package:tv_reminder/reminder.dart';
 import 'package:tv_reminder/tvshowlist.dart';
 
@@ -13,7 +13,7 @@ class BottomNavigationBarPage extends StatefulWidget {
 class _BottomNavigationBarState extends State<BottomNavigationBarPage> {
   int _currentIndex=0;
   final List<Widget> _children=[
-    HomePage(),
+    WatchListPage(),
     TvShowList(),
     Reminder(),
     HelpPage()
@@ -38,7 +38,7 @@ class _BottomNavigationBarState extends State<BottomNavigationBarPage> {
             })
           },
         ),
-        body:_children[_currentIndex]
+        body:_children[_currentIndex],
     );
   }
 }
