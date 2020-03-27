@@ -14,7 +14,16 @@ class _SplashState extends State<Splash>{
     return Scaffold(
         body:Container(
             padding: EdgeInsets.all(30),
-            color: Colors.cyan[800],
+            decoration: BoxDecoration(
+              gradient: new LinearGradient(
+                colors: [
+                  const Color(0xFF00ACC1),
+                  const Color(0xFF80DEEA),
+                ],
+                begin: Alignment.centerRight,
+                end: new Alignment(-1.0, -1.0),
+              ),
+            ),
             child:Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
