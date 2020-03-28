@@ -10,7 +10,7 @@ class _WatchListPageState extends State<WatchListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: PageTheme().pageTheme('Watch List', ListView(),context)
+        body: PageTheme().pageTheme('Watch List', context, ListView())
     );
   }
 }

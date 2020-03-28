@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
 
 //to reuse the widget
 class PageTheme{
-  pageTheme(String text,Widget widget,BuildContext context){
+  pageTheme(String text,BuildContext context,Widget widget){
     return new Container(
         color:  Colors.cyan[600],
         child:ListView(

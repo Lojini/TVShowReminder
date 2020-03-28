@@ -10,7 +10,7 @@ class _ReminderState extends State<Reminder>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: PageTheme().pageTheme('Reminder', ListView(), context)
+        body: PageTheme().pageTheme('Reminder', context, ListView())
     );
   }
 }
