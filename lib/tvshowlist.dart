@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'main.dart';
+import 'showDetails.dart';
 
 class TvShowList extends StatefulWidget{
 
@@ -20,8 +21,6 @@ class _TvShowListState extends State<TvShowList>{
     setState(() {
       userData = data["tv_shows"];
     });
-
-    debugPrint(userData.toString());
   }
 
   @override
@@ -32,6 +31,8 @@ class _TvShowListState extends State<TvShowList>{
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       body: PageTheme().pageTheme('TV Shows', context,
           ListView.builder(
@@ -46,17 +47,12 @@ class _TvShowListState extends State<TvShowList>{
                         children: <Widget>[
                           Container(
                               child: Row(
+
                                   children: <Widget>[
                                     CircleAvatar(
-                                      radius: 40,
+                                      radius: 30,
                                       backgroundImage: NetworkImage(userData[index]["image_thumbnail_path"]),
                                     ),
-                                    /*Image(
-                                        image: NetworkImage(userData[index]["image_thumbnail_path"]),
-                                        fit: BoxFit.cover,
-                                        height: 75.0,
-                                        width: 75.0
-                                    ),*/
 
                                     SizedBox(width: 10.0),
                                     Column(
@@ -85,7 +81,11 @@ class _TvShowListState extends State<TvShowList>{
                           IconButton(
                               icon: Icon(Icons.arrow_forward),
                               color: Colors.black,
-                              onPressed: () {}
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => ShowDetailsPage()
+                                ));
+                              }
                           ),
                         ]
                     )

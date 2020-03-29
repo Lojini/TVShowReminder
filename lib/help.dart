@@ -9,18 +9,6 @@ class HelpPage extends StatefulWidget{
 class _HelpPageState extends State<HelpPage>{
   @override
   Widget build(BuildContext context) {
-    /*final alucard = Hero(
-      tag: 'hero',
-      child: Padding(
-        padding: EdgeInsets.all(1.0),
-        child: CircleAvatar(
-          radius: 60.0,
-          backgroundColor: Colors.transparent,
-          backgroundImage: AssetImage('assets/plate1.png'),
-        ),
-      ),
-    );*/
-
     final Heading = Padding(
       padding: EdgeInsets.all(8.0),
       child: Text(
