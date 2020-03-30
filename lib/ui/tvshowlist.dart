@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import '../main.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
-import 'main.dart';
 import 'showDetails.dart';
 
 class TvShowList extends StatefulWidget{
-
   @override
   _TvShowListState createState()=> _TvShowListState();
 }
@@ -31,12 +30,9 @@ class _TvShowListState extends State<TvShowList>{
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       body: PageTheme().pageTheme('TV Shows', context,
           ListView.builder(
-
               padding: EdgeInsets.only(top: 30.0, left: 10.0, bottom: 20),
               itemCount: userData == null ? 0 : userData.length,
               itemBuilder: (BuildContext context, int index){
@@ -47,7 +43,6 @@ class _TvShowListState extends State<TvShowList>{
                         children: <Widget>[
                           Container(
                               child: Row(
-
                                   children: <Widget>[
                                     CircleAvatar(
                                       radius: 30,
@@ -83,17 +78,14 @@ class _TvShowListState extends State<TvShowList>{
                               color: Colors.black,
                               onPressed: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => ShowDetailsPage(userData[index])
+                                    builder: (context) => ShowDetailsPage(id:userData[index]["id"])
                                 ));
                               }
                           ),
                         ]
                     )
                 );
-
               }
-
-
           ) ),
 
     );

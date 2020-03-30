@@ -2,36 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
-import 'tvshowlist.dart';
-import 'main.dart';
+import '../main.dart';
 
 class ShowDetailsPage extends StatefulWidget {
-
-  final int userData;
-  ShowDetailsPage(this.userData);
+  final int id;
+  ShowDetailsPage({this.id});
 
   @override
   _ShowDetailsPageState createState() => _ShowDetailsPageState();
 }
 
 class _ShowDetailsPageState extends State<ShowDetailsPage> {
-  List data;
-  List detailsData;
-  int userData;
+   int userData;
+   Map data;
+   String name,url;
 
-  Future getData() async {
-    http.Response response = await http.get("https://www.episodate.com/api/most-popular?page=1/show-details?q=$userData");
-    data = json.decode(response.body);
-    setState(() {
-      detailsData = data;
+  Future getData(int userData) async {
+    http.Response response = await http.get("https://www.episodate.com/api/show-details?q=$userData");
+     setState(() {
+       data = json.decode(response.body);
+       name=data['tvShow']['name'];
+       url=data['tvShow']['image_thumbnail_path'];
     });
-    debugPrint(detailsData.toString());
   }
-
+  @override
   void initState() {
     super.initState();
-    userData = widget.userData;
-    getData();
+    userData=widget.id;
+    this.getData(userData);
   }
 
   @override
@@ -47,21 +45,23 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
               Positioned(
                   top: -20.0,
                   left: (MediaQuery.of(context).size.width / 2) - 100.0,
-                  child: Container(
+                  child: url!=null ? Container(
                           decoration: BoxDecoration(
                               image: DecorationImage(
-                                  //image: NetworkImage(userData[index]["image_thumbnail_path"]),
+                                  image: NetworkImage(url),
                                   fit: BoxFit.cover)),
                           height: 200.0,
-                          width: 200.0),
+                          width: 200.0):
+                      Container(
+                        child: Text("Loading.."),
+                      )
 
               ),
               SizedBox(width: 10.0),
               Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children:[
-                    Text("Name: ",
-                        //"${userData[index]["name"]}",
+                    Text("Name: $name",
                         style: TextStyle(
                             fontFamily: 'Montserrat',
                             fontSize: 9.0,
