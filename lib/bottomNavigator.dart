@@ -4,6 +4,7 @@ import 'package:tv_reminder/help.dart';
 import 'package:tv_reminder/watchlist.dart';
 import 'package:tv_reminder/reminder.dart';
 import 'package:tv_reminder/tvshowlist.dart';
+import 'package:tv_reminder/showDetails.dart';
 
 class BottomNavigationBarPage extends StatefulWidget {
   @override
@@ -16,7 +17,8 @@ class _BottomNavigationBarState extends State<BottomNavigationBarPage> {
     WatchListPage(),
     TvShowList(),
     Reminder(),
-    HelpPage()
+    HelpPage(),
+
   ];
 
   @override
