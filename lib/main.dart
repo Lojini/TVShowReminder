@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'splash.dart';
-import 'bottomNavigator.dart';
+import 'ui/splash.dart';
+import 'ui/bottomNavigator.dart';
 
 void main() => runApp(MyApp());
 
@@ -29,7 +29,7 @@ class PageTheme{
         child:ListView(
             children:[
               Padding(
-                padding: EdgeInsets.all(25),
+                padding: EdgeInsets.all(30),
                 child: Text(
                   text,
                   style: TextStyle(
@@ -41,7 +41,7 @@ class PageTheme{
                 ),
               ),
               Container(
-                  height: MediaQuery.of(context).size.height - 175.0,
+                  height: MediaQuery.of(context).size.height - 185.0,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(topLeft: Radius.circular(75.0)),

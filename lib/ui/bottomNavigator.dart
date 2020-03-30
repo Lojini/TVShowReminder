@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:tv_reminder/help.dart';
-import 'package:tv_reminder/watchlist.dart';
-import 'package:tv_reminder/reminder.dart';
-import 'package:tv_reminder/tvshowlist.dart';
-import 'package:tv_reminder/showDetails.dart';
+import 'package:tv_reminder/ui/reminder.dart';
+
+import 'package:tv_reminder/ui/showDetails.dart';
+import 'package:tv_reminder/ui/tvshowlist.dart';
+import 'package:tv_reminder/ui/watchlist.dart';
+
+import 'help.dart';
 
 class BottomNavigationBarPage extends StatefulWidget {
   @override
@@ -16,9 +18,8 @@ class _BottomNavigationBarState extends State<BottomNavigationBarPage> {
   final List<Widget> _children=[
     WatchListPage(),
     TvShowList(),
-    Reminder(),
-    HelpPage(),
-
+    ReminderPage(),
+    HelpPage()
   ];
 
   @override
