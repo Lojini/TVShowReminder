@@ -18,7 +18,7 @@ class _BottomNavigationBarState extends State<BottomNavigationBarPage> {
     TvShowList(),
     Reminder(),
     HelpPage(),
-    ShowDetailsPage()
+
   ];
 
   @override

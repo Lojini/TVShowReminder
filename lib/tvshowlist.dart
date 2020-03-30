@@ -83,7 +83,7 @@ class _TvShowListState extends State<TvShowList>{
                               color: Colors.black,
                               onPressed: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => ShowDetailsPage()
+                                    builder: (context) => ShowDetailsPage(userData[index])
                                 ));
                               }
                           ),
