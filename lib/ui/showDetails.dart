@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:tv_reminder/services/reminderApi.dart';
+import 'package:tv_reminder/services/watchListApi.dart';
 import 'dart:async';
 import 'dart:convert';
 import '../main.dart';
@@ -15,7 +18,8 @@ class ShowDetailsPage extends StatefulWidget {
 class _ShowDetailsPageState extends State<ShowDetailsPage> {
    int userData;
    Map data;
-   String name,url;
+   String name,url,documentId,reminderId;
+   bool isButtonDisabled=false;
 
   Future getData(int userData) async {
     http.Response response = await http.get("https://www.episodate.com/api/show-details?q=$userData");
@@ -30,10 +34,14 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
     super.initState();
     userData=widget.id;
     this.getData(userData);
+    this.checkExists(name);
+    this.checkIfReminderExists(name);
   }
 
   @override
   Widget build(BuildContext context) {
+    this.checkExists(name);
+    this.checkIfReminderExists(name);
     return Scaffold(
         body: PageTheme().pageTheme('Show Details', context,
         ListView(children: [
@@ -121,7 +129,11 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
               Container(
                 height: 50.0,
                 child: RaisedButton(
-                  onPressed: () {},
+                  onPressed: isButtonDisabled?() {
+                    _confirmDialog(context,"Are you sure you want to remove this show from the list?\n\nReminder for this show will be deleted",true);
+                  }:(){
+                    _confirmDialog(context,'Do you want to add this show to your watch list?',false);
+                  },
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
                   padding: EdgeInsets.all(0.0),
                   child: Ink(
@@ -135,20 +147,89 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
                     child: Container(
                       constraints: BoxConstraints(maxWidth: 300.0, minHeight: 50.0),
                       alignment: Alignment.center,
-                      child: Text(
-                        "Track Show",
+                      child: isButtonDisabled?Text(
+                        "Added to watchlist",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Colors.white
                         ),
-                      ),
+                      ):Text(
+                          "Add to watchlist",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.white
+                          )
                     ),
                   ),
                 ),
               ),
-
+              )
               ])
         ]))
     );
   }
+   Future _confirmDialog(BuildContext context,String text,bool isAdded){
+     return showDialog(
+         context:context,
+         builder: (context) {
+           return AlertDialog(
+             title: Align(alignment:Alignment.topLeft,child:Icon(Icons.favorite,color: Colors.red)),
+             content:Text(text),
+             actions: <Widget>[
+               Row(
+                   mainAxisAlignment: MainAxisAlignment.start,
+                   children:<Widget>[
+                     RaisedButton(
+                       color: Colors.cyan[600],
+                       child:Text('Yes'),
+                       onPressed: isAdded?(){
+                         WatchListAPI.deleteWatchlist(documentId);
+                         ReminderAPI.deleteReminder(reminderId);
+                         Navigator.pop(context);
+                       }:
+                       (){
+                         WatchListAPI.addToWatchlist(userData,name,url,null);
+                         Navigator.pop(context);
+                       }
+                     ),
+                     SizedBox(width: 10,),
+                     RaisedButton(
+                       color: Colors.red,
+                       child: Text('Cancel'),
+                       onPressed: (){
+                         Navigator.pop(context);
+                       },
+                     )
+                   ]
+               )
+             ],
+           );
+         });
+   }
+   
+   checkExists(String name) async{
+       QuerySnapshot query = await WatchListAPI.reference.where('showName',isEqualTo: name).getDocuments();
+       setState(() {
+         if(query.documents.length==1) {
+           isButtonDisabled = true;
+           documentId=query.documents[0].documentID;
+         }
+         else
+           isButtonDisabled=false;
+       });
+
+   }
+
+   checkIfReminderExists(String name) async{
+     QuerySnapshot query = await ReminderAPI.reference.where('showName',isEqualTo: name).getDocuments();
+     setState(() {
+       if(query.documents.length==1) {
+         isButtonDisabled = true;
+         reminderId=query.documents[0].documentID;
+       }
+       else
+         isButtonDisabled=false;
+     });
+
+   }
 }

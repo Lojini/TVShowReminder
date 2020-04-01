@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:tv_reminder/ui/reminder.dart';
-
-import 'package:tv_reminder/ui/showDetails.dart';
 import 'package:tv_reminder/ui/tvshowlist.dart';
 import 'package:tv_reminder/ui/watchlist.dart';
 

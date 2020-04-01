@@ -10,9 +10,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
       home: Splash(),
       routes: <String, WidgetBuilder>{
         '/Home': (BuildContext context) => new BottomNavigationBarPage()
