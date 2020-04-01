@@ -32,12 +32,16 @@ class _TvShowListState extends State<TvShowList>{
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageTheme().pageTheme('TV Shows', context,
-          ListView.builder(
+          ListView.separated(
+            separatorBuilder:(context,builder) =>Divider(
+              color: Colors.grey,
+              thickness: 0.5,
+          ),
               padding: EdgeInsets.only(top: 30.0, left: 10.0, bottom: 20),
               itemCount: userData == null ? 0 : userData.length,
               itemBuilder: (BuildContext context, int index){
                 return Padding(
-                    padding: EdgeInsets.only(left: 20.0, right: 10.0, top: 20.0),
+                    padding: EdgeInsets.only(left: 20.0, right: 10.0, top: 5),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
@@ -74,7 +78,7 @@ class _TvShowListState extends State<TvShowList>{
                                   ]
                               )),
                           IconButton(
-                              icon: Icon(Icons.arrow_forward),
+                              icon: Icon(Icons.arrow_forward_ios,color: Colors.grey,size: 20,),
                               color: Colors.black,
                               onPressed: () {
                                 Navigator.of(context).push(MaterialPageRoute(
