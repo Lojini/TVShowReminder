@@ -13,7 +13,7 @@ class _HelpPageState extends State<HelpPage>{
       padding: EdgeInsets.all(8.0),
       child: Text(
         'How Do I Follow a show?',
-        style: TextStyle(fontSize: 28.0, color: Colors.black),
+        style: TextStyle(fontSize: 28.0, fontFamily:'Montserrat',color: Colors.black),
       ),
     );
 
@@ -21,15 +21,15 @@ class _HelpPageState extends State<HelpPage>{
       padding: EdgeInsets.all(8.0),
       child: Text(
         '1. Tap the title of a show or the show poster to access the show pages.',
-        style: TextStyle(fontSize: 16.0, color: Colors.black),
+        style: TextStyle(fontSize: 16.0,fontFamily:'Montserrat', color: Colors.black),
       ),
     );
 
     final second = Padding(
       padding: EdgeInsets.all(8.0),
       child: Text(
-        '2. There will be a yelloe banner at the bottom of the page that says "ADD THIS SHOW".',
-        style: TextStyle(fontSize: 16.0, color: Colors.black),
+        '2. There will be a yellow banner at the bottom of the page that says "ADD THIS SHOW".',
+        style: TextStyle(fontSize: 16.0, fontFamily:'Montserrat',color: Colors.black),
       ),
     );
 
@@ -37,15 +37,17 @@ class _HelpPageState extends State<HelpPage>{
       padding: EdgeInsets.all(8.0),
       child: Text(
         '3. Tap the banner to follow the show.',
-        style: TextStyle(fontSize: 16.0, color: Colors.black),
+        style: TextStyle(fontSize: 16.0, fontFamily:'Montserrat',color: Colors.black),
       ),
     );
 
     final content = Container(
       width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.all(28.0),
+      padding: EdgeInsets.all(30.0),
 
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
         children: <Widget>[Heading, first, second, third],
       ),
     );
