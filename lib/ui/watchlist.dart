@@ -8,6 +8,7 @@ import 'package:tv_reminder/ui/showDetails.dart';
 import '../main.dart';
 import 'customReminderDialog.dart';
 
+
 class WatchListPage extends StatefulWidget {
   @override
   _WatchListPageState createState() => _WatchListPageState();
@@ -15,6 +16,7 @@ class WatchListPage extends StatefulWidget {
 
 class _WatchListPageState extends State<WatchListPage> {
   bool isButtonDisabled = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -129,5 +131,4 @@ class _WatchListPageState extends State<WatchListPage> {
       ),
     );
   }
-
 }

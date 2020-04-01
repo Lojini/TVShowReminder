@@ -67,6 +67,7 @@ class _ReminderState extends State<ReminderPage>{
                       ),
                     ),
                     SizedBox(width: 5,),
+
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -101,6 +102,7 @@ class _ReminderState extends State<ReminderPage>{
                         )
                       ],
                     ),
+
                     IconButton(
                      icon:Icon(Icons.delete_outline,size: 35,color: Colors.grey,),
                       onPressed: (){

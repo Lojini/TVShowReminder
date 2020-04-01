@@ -24,6 +24,7 @@ class WatchListAPI{
       });
     });
   }
+  
   static deleteWatchlist(String id){
     Firestore.instance.runTransaction((Transaction transaction) async{
       await reference.document(id).delete().catchError((error){
