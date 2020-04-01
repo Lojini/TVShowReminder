@@ -19,7 +19,7 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
    int userData;
    Map data;
    String name,url,documentId,reminderId;
-   bool isButtonDisabled=false;
+   bool showExists=false;
 
   Future getData(int userData) async {
     http.Response response = await http.get("https://www.episodate.com/api/show-details?q=$userData");
@@ -29,19 +29,42 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
        url=data['tvShow']['image_thumbnail_path'];
     });
   }
+   checkExists(String show) async{
+     QuerySnapshot queryName = await WatchListAPI.reference.where('showName',isEqualTo: show).getDocuments();
+     setState(() {
+       if(queryName.documents.length==1) {
+         showExists = true;
+         documentId=queryName.documents[0].documentID;
+       }
+       else {
+         showExists = false;
+       }
+     });
+
+   }
+
+   checkIfReminderExists(String name) async{
+     QuerySnapshot query = await ReminderAPI.reference.where('showName',isEqualTo: name).getDocuments();
+     setState(() {
+       if(query.documents.length==1) {
+         reminderId=query.documents[0].documentID;
+       }
+     });
+
+   }
   @override
   void initState() {
     super.initState();
     userData=widget.id;
-    this.getData(userData);
-    this.checkExists(name);
-    this.checkIfReminderExists(name);
+    getData(userData);
+    checkExists(name);
+    checkIfReminderExists(name);
   }
 
   @override
   Widget build(BuildContext context) {
-    this.checkExists(name);
-    this.checkIfReminderExists(name);
+    checkExists(name);
+    checkIfReminderExists(name);
     return Scaffold(
         body: PageTheme().pageTheme('Show Details', context,
         ListView(children: [
@@ -129,7 +152,7 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
               Container(
                 height: 50.0,
                 child: RaisedButton(
-                  onPressed: isButtonDisabled?() {
+                  onPressed: showExists?() {
                     _confirmDialog(context,"Are you sure you want to remove this show from the list?\n\nReminder for this show will be deleted",true);
                   }:(){
                     _confirmDialog(context,'Do you want to add this show to your watch list?',false);
@@ -147,7 +170,7 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
                     child: Container(
                       constraints: BoxConstraints(maxWidth: 300.0, minHeight: 50.0),
                       alignment: Alignment.center,
-                      child: isButtonDisabled?Text(
+                      child: showExists?Text(
                         "Added to watchlist",
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -207,29 +230,5 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
          });
    }
    
-   checkExists(String name) async{
-       QuerySnapshot query = await WatchListAPI.reference.where('showName',isEqualTo: name).getDocuments();
-       setState(() {
-         if(query.documents.length==1) {
-           isButtonDisabled = true;
-           documentId=query.documents[0].documentID;
-         }
-         else
-           isButtonDisabled=false;
-       });
 
-   }
-
-   checkIfReminderExists(String name) async{
-     QuerySnapshot query = await ReminderAPI.reference.where('showName',isEqualTo: name).getDocuments();
-     setState(() {
-       if(query.documents.length==1) {
-         isButtonDisabled = true;
-         reminderId=query.documents[0].documentID;
-       }
-       else
-         isButtonDisabled=false;
-     });
-
-   }
 }
