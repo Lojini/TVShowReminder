@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:tv_reminder/models/reminder.dart';
 import 'package:tv_reminder/services/reminderApi.dart';
 import 'package:tv_reminder/ui/customReminderDialog.dart';
@@ -32,6 +33,7 @@ class _ReminderState extends State<ReminderPage>{
     );
   }
 
+  //build each item in the list
   Widget buildListItem(BuildContext context,DocumentSnapshot data){
     final reminder = Reminder.fromSnapshot(data);
     return Padding(
@@ -46,8 +48,7 @@ class _ReminderState extends State<ReminderPage>{
                                 reminder:Reminder(
                                  showName: reminder.showName,
                                  imageUrl: reminder.imageUrl,
-                                 showDate: reminder.showDate,
-                                 showTime: reminder.showTime,
+                                 showDateTime: reminder.showDateTime,
                                  reminderStart: reminder.reminderStart)
            ),
            );
@@ -81,7 +82,7 @@ class _ReminderState extends State<ReminderPage>{
                         ),
                         SizedBox(height: 10,),
                         Text(
-                          'On ${reminder.showDate} at ${reminder.showTime}',
+                          '${DateFormat.yMMMMd("en_US").add_jm().format(reminder.showDateTime)}',
                               style:TextStyle(
                                 fontFamily: 'Montserrat',
                                 fontSize: 15.0,
@@ -120,6 +121,7 @@ class _ReminderState extends State<ReminderPage>{
     );
   }
 
+  //alert dialog to confirm before deletion
   Future _confirmDialog(BuildContext context,String documentID){
     return showDialog(
         context:context,
@@ -154,6 +156,7 @@ class _ReminderState extends State<ReminderPage>{
         });
   }
 
+  //to display when the reminder list is empty
   Widget emptyPage(){
     return Container(
       child: Column(
@@ -161,20 +164,21 @@ class _ReminderState extends State<ReminderPage>{
         children: <Widget>[
           Image.asset('assets/sad_Tv.png',
           height: 100,
-          width: 100,),
+          width: 150,),
           Text('You have no reminder!!',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 28,
-                color: Colors.grey,
+                fontSize: 20,
+                color: Color(0xFFd2d9d9),
                 fontFamily: 'Montserrat'
             ),
           ),
-          Text('Add your reminder from watchlist ',
+          SizedBox(height: 10,),
+          Text('Add your reminder \n  from watchlist ',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 14,
-                color: Colors.grey,
+                fontSize: 16,
+                color: Color(0xFFd2d9d9),
                 fontFamily: 'Montserrat'
             ),
           ),

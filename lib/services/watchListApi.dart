@@ -4,12 +4,13 @@ class WatchListAPI{
   static Stream<QuerySnapshot> watchlistStream = Firestore.instance.collection('watchlist').snapshots();
   static CollectionReference reference = Firestore.instance.collection('watchlist');
 
-  static addToWatchlist(int id,String showName,String url,String reminder){
+  static addToWatchlist(int id,String showName,String url,String dateTime,String reminder){
     Firestore.instance.runTransaction((Transaction transaction) async{
       await reference.add({
         "showId":id,
          "showName":showName,
         "imageUrl":url,
+        "dateTime":dateTime,
         "reminder":reminder
       });
     });

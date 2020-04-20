@@ -5,11 +5,16 @@ import 'ui/bottomNavigator.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
+      theme:ThemeData(
+        accentColor: Color(0xFF6cc3c1),
+        primaryColor: Color(0xFF42CCC8)
+      ),
       home: Splash(),
       routes: <String, WidgetBuilder>{
         '/Home': (BuildContext context) => new BottomNavigationBarPage()
@@ -18,11 +23,11 @@ class MyApp extends StatelessWidget {
   }
 }
 
-//to reuse the widget
+//to reuse the curved theme to all screens
 class PageTheme{
   pageTheme(String text,BuildContext context,Widget widget){
     return new Container(
-        color:  Colors.cyan[600],
+        color:  Color(0xFF42CCC8),
         child:ListView(
             children:[
               Padding(

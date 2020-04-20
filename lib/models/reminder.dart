@@ -3,12 +3,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Reminder{
   String showName;
   String imageUrl;
-  String showDate;
-  String showTime;
+  DateTime showDateTime;
   String reminderStart;
   DocumentReference reference;
 
-  Reminder({this.showName,this.imageUrl,this.showDate,this.showTime,this.reminderStart});
+  Reminder({this.showName,this.imageUrl,this.showDateTime,this.reminderStart});
 
   Reminder.fromMap(Map<String,dynamic> map,{this.reference}):
       assert(map['name']!=null),
@@ -17,8 +16,7 @@ class Reminder{
       assert(map['start']!=null),
       showName = map['name'],
       imageUrl = map['url'],
-      showDate = map['date'],
-      showTime =map['time'],
+      showDateTime = map['showDateTime'],
       reminderStart = map['start'];
 
 
@@ -29,8 +27,7 @@ class Reminder{
     return {
       'name':showName,
       'url' :imageUrl,
-      'date':showDate,
-      'time':showTime,
+      'showDateTime':showDateTime,
       'start':reminderStart};
 
   }
