@@ -12,7 +12,6 @@ class ReminderPage extends StatefulWidget{
 }
 
 class _ReminderState extends State<ReminderPage>{
-  final _formKey = GlobalKey<FormState>();
   Widget buildBody(BuildContext context){
     return StreamBuilder<QuerySnapshot>(
         stream: ReminderAPI.reminderStream,
@@ -37,7 +36,7 @@ class _ReminderState extends State<ReminderPage>{
     final reminder = Reminder.fromSnapshot(data);
     return Padding(
       key: ValueKey(data.documentID),
-      padding: EdgeInsets.only(left:10.0),
+      padding: EdgeInsets.only(left:0.0),
       child: InkWell(
         onTap: () {
            showDialog(
@@ -58,7 +57,7 @@ class _ReminderState extends State<ReminderPage>{
               Container(
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     Hero(
                       tag: reminder.imageUrl,
@@ -67,6 +66,8 @@ class _ReminderState extends State<ReminderPage>{
                         backgroundImage: NetworkImage(reminder.imageUrl),
                       ),
                     ),
+                    SizedBox(width: 5,),
+
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -101,7 +102,7 @@ class _ReminderState extends State<ReminderPage>{
                         )
                       ],
                     ),
-                    SizedBox(width: 5,),
+
                     IconButton(
                      icon:Icon(Icons.delete_outline,size: 35,color: Colors.grey,),
                       onPressed: (){

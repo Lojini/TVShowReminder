@@ -2,6 +2,7 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:tv_reminder/models/reminder.dart';
 import 'package:tv_reminder/services/reminderApi.dart';
+import 'package:tv_reminder/services/watchListApi.dart';
 
 class CustomReminderDialog extends StatefulWidget{
   final Reminder reminder;
@@ -14,12 +15,13 @@ class CustomReminderDialog extends StatefulWidget{
 
 }
 class _CustomReminderDialogState extends State<CustomReminderDialog>{
-  bool _IsButtonDisabled= true;
+  bool _isButtonDisabled= true;
    String  dropdownValue;
 
   @override
   void initState(){
     super.initState();
+    if(widget.documentId!=null)
     dropdownValue = widget.reminder.reminderStart;
   }
 
@@ -110,9 +112,9 @@ class _CustomReminderDialogState extends State<CustomReminderDialog>{
                               setState(() {
                                 dropdownValue = value;
                                 if(widget.reminder.reminderStart != dropdownValue)
-                                  _IsButtonDisabled = false;
+                                  _isButtonDisabled = false;
                                 else
-                                  _IsButtonDisabled = true;
+                                  _isButtonDisabled = true;
                               });
                             },
                           )
@@ -132,24 +134,27 @@ class _CustomReminderDialogState extends State<CustomReminderDialog>{
                         )
                     ),
                     color: Colors.cyan[600],
-                    onPressed: _IsButtonDisabled ? null : (){
-                      if(widget.documentId!=null && dropdownValue!=null){
+                    onPressed: _isButtonDisabled ? null : (){
+                      if(widget.documentId!=null && widget.reminder.reminderStart!=null){
                         ReminderAPI.updateReminder(widget.documentId, dropdownValue);
                         Navigator.pop(context);
                        }
-                      else
+                      else {
                         ReminderAPI.addReminder(new Reminder(
                             showName: widget.reminder.showName,
                             imageUrl: widget.reminder.imageUrl,
                             showDate: widget.reminder.showDate,
                             showTime: widget.reminder.showTime,
-                            reminderStart: widget.reminder.reminderStart));
+                            reminderStart:dropdownValue));
+                        WatchListAPI.updateWatchlist(widget.documentId, true);
+                        Navigator.pop(context);
+                      }
                      },
                     child:Container(
                       constraints: BoxConstraints(minHeight: 50,minWidth: 600),
                       alignment: Alignment.center,
                       child:Text(
-                        widget.reminder.showName !=null && widget.documentId!=null ? "Update" : "Add"
+                        widget.reminder.reminderStart !=null && widget.documentId!=null ? "Update" : "Add"
                       ,style: TextStyle(
                           fontSize: 16,color: Colors.white
                       ),),
