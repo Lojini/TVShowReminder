@@ -1,12 +1,16 @@
+import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:intl/intl.dart';
 import 'package:tv_reminder/models/reminder.dart';
 import 'package:tv_reminder/services/watchListApi.dart';
 import 'package:tv_reminder/ui/showDetails.dart';
 import '../main.dart';
 import 'customReminderDialog.dart';
+import 'package:http/http.dart' as http;
 
 
 class WatchListPage extends StatefulWidget {
@@ -16,7 +20,9 @@ class WatchListPage extends StatefulWidget {
 
 class _WatchListPageState extends State<WatchListPage> {
   bool isButtonDisabled = false;
-
+  Map data;
+  String date,time,timeZone;
+  DateTime dateTime;
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +65,7 @@ class _WatchListPageState extends State<WatchListPage> {
                               top: 50,
                                  child:list['reminder']==null?GestureDetector(
                                    onTap: (){
+                                     dateTime =DateTime.parse(list['dateTime']);
                                      showDialog(
                                        context: context,
                                        builder: (context) =>
@@ -66,8 +73,7 @@ class _WatchListPageState extends State<WatchListPage> {
                                                documentId:list.documentID,
                                                reminder: Reminder(
                                                    showName: list['showName'],
-                                                   showDate: '2020-09-3',
-                                                   showTime: '05.30 P.M',
+                                                   showDateTime:dateTime.toLocal(),
                                                    imageUrl: list['imageUrl'])
                                            ),
                                      );
@@ -110,20 +116,21 @@ class _WatchListPageState extends State<WatchListPage> {
         children: <Widget>[
           Image.asset('assets/sad_Tv.png',
             height: 100,
-            width: 100,),
-          Text('You have no shows!!',textAlign: TextAlign.justify,
+            width: 150,),
+          Text('You have no reminder!!',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 28,
-                color: Colors.grey,
+                fontSize: 20,
+                color: Color(0xFFd2d9d9),
                 fontFamily: 'Montserrat'
             ),
           ),
-          Text('Add your favourite show.. ',
+          SizedBox(height: 10,),
+          Text('Add to watchlist from tv shows',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 14,
-                color: Colors.grey,
+                fontSize: 16,
+                color: Color(0xFFd2d9d9),
                 fontFamily: 'Montserrat'
             ),
           ),

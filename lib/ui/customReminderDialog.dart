@@ -1,8 +1,11 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:tv_reminder/models/reminder.dart';
 import 'package:tv_reminder/services/reminderApi.dart';
 import 'package:tv_reminder/services/watchListApi.dart';
+
+import 'notification.dart';
 
 class CustomReminderDialog extends StatefulWidget{
   final Reminder reminder;
@@ -17,6 +20,7 @@ class CustomReminderDialog extends StatefulWidget{
 class _CustomReminderDialogState extends State<CustomReminderDialog>{
   bool _isButtonDisabled= true;
    String  dropdownValue;
+   NotificationManager manager;
 
   @override
   void initState(){
@@ -27,6 +31,8 @@ class _CustomReminderDialogState extends State<CustomReminderDialog>{
 
   @override
   Widget build(BuildContext context){
+    String date= DateFormat.yMMMMd("en_US").format(widget.reminder.showDateTime);
+    String time= DateFormat.jm().format(widget.reminder.showDateTime);
     return Dialog(
       elevation: 0.0,
       backgroundColor: Colors.transparent,
@@ -75,7 +81,7 @@ class _CustomReminderDialogState extends State<CustomReminderDialog>{
                         children: <Widget>[
                           Icon(Icons.calendar_today,size: 30,color: Colors.grey,),
                           SizedBox(width: 10,),
-                          Text(widget.reminder.showDate,
+                          Text(date,
                             style: TextStyle(
                               fontSize: 14,
                             ),),
@@ -86,7 +92,7 @@ class _CustomReminderDialogState extends State<CustomReminderDialog>{
                         children: <Widget>[
                           Icon(Icons.access_time,size: 30,color: Colors.grey,),
                           SizedBox(width: 10,),
-                          Text(widget.reminder.showTime,
+                          Text(time,
                             style: TextStyle(
                               fontSize: 14,
                             ),),
@@ -140,12 +146,26 @@ class _CustomReminderDialogState extends State<CustomReminderDialog>{
                         Navigator.pop(context);
                        }
                       else {
+                        int remind;
                         ReminderAPI.addReminder(new Reminder(
                             showName: widget.reminder.showName,
                             imageUrl: widget.reminder.imageUrl,
-                            showDate: widget.reminder.showDate,
-                            showTime: widget.reminder.showTime,
+                            showDateTime: widget.reminder.showDateTime,
                             reminderStart:dropdownValue));
+                        switch(dropdownValue){
+                          case '5 minutes' :
+                            remind = 5;
+                            break;
+                          case '15 minutes' :
+                            remind = 15;
+                            break;
+                          case '30 minutes' :
+                            remind = 30;
+                            break;
+                          case '1 hour':
+                            remind = 60;
+                        }
+                         manager.scheduleNotification(widget.reminder.showName,widget.reminder.showDateTime,remind);
                         WatchListAPI.updateWatchlist(widget.documentId, true);
                         Navigator.pop(context);
                       }

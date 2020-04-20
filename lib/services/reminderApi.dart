@@ -11,8 +11,7 @@ class ReminderAPI{
         await reference.add({
           "name":reminder.showName,
           "url" :reminder.imageUrl,
-          "date":reminder.showDate,
-          "time":reminder.showTime,
+          "showDateTime":reminder.showDateTime,
           "start":reminder.reminderStart
         });
       });
