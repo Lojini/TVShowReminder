@@ -1,6 +1,6 @@
-# tv_reminder
+# TV show reminder app
 
-A new Flutter application.
+A Flutter application to add reminder to your favourite tv shows.
 
 ## Getting Started
 
