@@ -11,15 +11,20 @@ class TvShowList extends StatefulWidget{
 }
 
 class _TvShowListState extends State<TvShowList>{
-  Map data;
+  List data;
   List userData;
 
   Future getData() async {
-    http.Response response = await http.get("https://www.episodate.com/api/most-popular?page=1");
+    http.Response response = await http.get("http://api.tvmaze.com/schedule?date=2020-04-30");
+    //debugPrint(response.body);
     data = json.decode(response.body);
     setState(() {
-      userData = data["tv_shows"];
+      userData = data;
     });
+
+
+    //debugPrint(userData.toString());
+
   }
 
   @override
@@ -46,7 +51,9 @@ class _TvShowListState extends State<TvShowList>{
                                   children: <Widget>[
                                     CircleAvatar(
                                       radius: 30,
-                                      backgroundImage: NetworkImage(userData[index]["image_thumbnail_path"]),
+                                    backgroundImage: userData[index]["show"]["image"] != null ?
+                                    NetworkImage(userData[index]["show"]["image"]["original"])
+                                        :AssetImage("assets/tv.jpg"),
                                     ),
 
                                     SizedBox(width: 10.0),
@@ -54,7 +61,7 @@ class _TvShowListState extends State<TvShowList>{
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children:[
                                           Text(
-                                              "${userData[index]["name"]}",
+                                              "${userData[index]["show"]["name"]}",
                                               style: TextStyle(
                                                   fontFamily: 'Montserrat',
                                                   fontSize: 9.0,
@@ -62,7 +69,7 @@ class _TvShowListState extends State<TvShowList>{
                                               )
                                           ),
                                           Text(
-                                              "${userData[index]["network"]}",
+                                              "${userData[index]["show"]["network"]["name"]}",
                                               style: TextStyle(
                                                   fontFamily: 'Montserrat',
                                                   fontSize: 12.0,
@@ -78,7 +85,7 @@ class _TvShowListState extends State<TvShowList>{
                               color: Colors.black,
                               onPressed: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => ShowDetailsPage(id:userData[index]["id"])
+                                    builder: (context) => ShowDetailsPage(id:userData[index]["show"]["id"])
                                 ));
                               }
                           ),
