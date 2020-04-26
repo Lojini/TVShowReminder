@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import '../main.dart';
 
+// Start HelpPage
 class HelpPage extends StatefulWidget{
   @override
   _HelpPageState createState()=> _HelpPageState();
 }
+// End HelpPage
 
+// Start _HelpPageState
 class _HelpPageState extends State<HelpPage>{
   @override
   Widget build(BuildContext context) {
@@ -28,7 +31,7 @@ class _HelpPageState extends State<HelpPage>{
     final second = Padding(
       padding: EdgeInsets.all(8.0),
       child: Text(
-        '2. There will be a yellow banner at the bottom of the page that says "ADD THIS SHOW".',
+        '2. There will be a blue button at the bottom of the page that says "Add to Watchlist".',
         style: TextStyle(fontSize: 16.0, fontFamily:'Montserrat',color: Colors.black),
       ),
     );
@@ -36,7 +39,7 @@ class _HelpPageState extends State<HelpPage>{
     final third = Padding(
       padding: EdgeInsets.all(8.0),
       child: Text(
-        '3. Tap the banner to follow the show.',
+        '3. Tap the button to follow the show.',
         style: TextStyle(fontSize: 16.0, fontFamily:'Montserrat',color: Colors.black),
       ),
     );
@@ -57,3 +60,5 @@ class _HelpPageState extends State<HelpPage>{
     ));
   }
 }
+
+// Start _HelpPageState

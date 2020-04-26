@@ -7,6 +7,7 @@ import 'dart:async';
 import 'dart:convert';
 import '../main.dart';
 
+// Start Show DetailsPage
 class ShowDetailsPage extends StatefulWidget {
   final int id;
   ShowDetailsPage({this.id});
@@ -14,26 +15,35 @@ class ShowDetailsPage extends StatefulWidget {
   @override
   _ShowDetailsPageState createState() => _ShowDetailsPageState();
 }
+// End Show DetailsPage
 
+// Start _ShowDetailsPageState
 class _ShowDetailsPageState extends State<ShowDetailsPage> {
    int userData;
    Map data;
-   String name, url, air_date, start_date, end_date, country, network, status,documentId,reminderId;
+   String name, image, date, time, day, country, network, timeZone, rating, documentId,reminderId;
    bool showExists=false;
 
+
   Future getData(int userData) async {
-    http.Response response = await http.get("https://www.episodate.com/api/show-details?q=$userData");
+    //API Connection
+    http.Response response = await http.get("http://api.tvmaze.com/shows/$userData");
+    //debugPrint(response.body);
+
+    //set API's data into variables
      setState(() {
        data = json.decode(response.body);
-       name=data['tvShow']['name'];
-       url=data['tvShow']['image_thumbnail_path'];
-       air_date=data['tvShow']['air_date'];
-       start_date=data['tvShow']['start_date'];
-       end_date=data['tvShow']['end_date'];
-       country=data['tvShow']['country'];
-       network=data['tvShow']['network'];
-       status=data['tvShow']['status'];
+       name=data['name'];
+       image=data["image"]["original"];
+       date=data['premiered'];
+       time=data['schedule']['time'];
+       country=data['network']['country']['name'];
+       network=data['network']['name'];
+       timeZone=data['network']['country']['timezone'];
+       rating=data['rating']['average'] ;
     });
+
+     debugPrint(data.toString());
   }
    checkExists(String show) async{
      QuerySnapshot queryName = await WatchListAPI.reference.where('showName',isEqualTo: show).getDocuments();
@@ -49,6 +59,7 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
 
    }
 
+   //Check reminder if is exist or not
    checkIfReminderExists(String name) async{
      QuerySnapshot query = await ReminderAPI.reference.where('showName',isEqualTo: name).getDocuments();
      setState(() {
@@ -73,6 +84,7 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
     checkExists(name);
     checkIfReminderExists(name);
     return Scaffold(
+      //Start body
         body: PageTheme().pageTheme('$name', context,
         ListView(children: [
             Stack(children: [
@@ -83,16 +95,16 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
               Positioned(
                   top: 5.0,
                   left: (MediaQuery.of(context).size.width / 2) - 60.0,
-                  child: url!=null ? Container(
+                  child: Container(
+                    //Show image
                       child: CircleAvatar(
                         radius: 30,
-                        backgroundImage: NetworkImage(url),
+                        backgroundImage: image != null ?
+                        NetworkImage(image)
+                            :AssetImage("assets/tv.jpg"),
                       ),
                           height: 130.0,
-                          width: 130.0):
-                      Container(
-                        child: Text("Loading.."),
-                      )
+                          width: 130.0)
 
               ),
               SizedBox(width: 10.0,),
@@ -103,6 +115,7 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                       children:[
+                        // Show Name
                         Text("Name: $name \n",
                             style: TextStyle(
                                 fontFamily: 'Montserrat',
@@ -110,27 +123,23 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
                                 fontWeight: FontWeight.bold
                             )
                         ),
-                        Text("Permalink: $air_date \n",
+                        // Show Date
+                        Text("Start date: $date \n",
                             style: TextStyle(
                                 fontFamily: 'Montserrat',
                                 fontSize: 13.0,
                                 fontWeight: FontWeight.bold
                             )
                         ),
-                        Text("Start date: $start_date \n",
+                        // Show time
+                        Text("Start time: $time \n",
                             style: TextStyle(
                                 fontFamily: 'Montserrat',
                                 fontSize: 13.0,
                                 fontWeight: FontWeight.bold
                             )
                         ),
-                        Text("End date: $end_date \n",
-                            style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontSize: 13.0,
-                                fontWeight: FontWeight.bold
-                            )
-                        ),
+                        // Show Country
                         Text("Country: $country \n",
                             style: TextStyle(
                                 fontFamily: 'Montserrat',
@@ -138,6 +147,7 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
                                 fontWeight: FontWeight.bold
                             )
                         ),
+                        // Show Network
                         Text("Network: $network \n",
                             style: TextStyle(
                                 fontFamily: 'Montserrat',
@@ -145,17 +155,37 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
                                 fontWeight: FontWeight.bold
                             )
                         ),
-                        Text("Status: $status \n",
+                        // Show TimeZone
+                        Text("Time Zone: $timeZone \n",
                             style: TextStyle(
                                 fontFamily: 'Montserrat',
                                 fontSize: 13.0,
                                 fontWeight: FontWeight.bold
                             )
                         ),
+                        rating != null?
+                        // Show Rating
+                        Text("Rating: $rating \n",
+                            style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 13.0,
+                                fontWeight: FontWeight.bold
+                            )
+                        )
+                            :Text("Rating: 4.3 \n",
+                            style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 13.0,
+                                fontWeight: FontWeight.bold
+                            )
+                        ),
+
                       ]
 
                   )
               ),
+
+              //Add show into watchlist
               Positioned(
                 top: 450.0,
                 left: 80.0,
@@ -181,18 +211,13 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
                         child: Container(
                           constraints: BoxConstraints(maxWidth: 200.0, minHeight: 50.0),
                           alignment: Alignment.center,
-                          child: showExists?Text(
-                        "Added to watchlist",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Colors.white
-                        ),
-                      ):Text(
-                          "Add to watchlist",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.white
-                          ),
+                          child: Text(
+                            "Add to Watchlist",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white
+                            ),
+
                           ),
                         ),
                       ),
@@ -202,10 +227,13 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
               )
 
               ])
-        ]))
+        ])
+        //End body
+      )
     );
   }
 
+  //Start _confirmDialog Function
    Future _confirmDialog(BuildContext context,String text,bool isAdded){
      return showDialog(
          context:context,
@@ -226,7 +254,7 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
                          Navigator.pop(context);
                        }:
                        (){
-                         WatchListAPI.addToWatchlist(userData,name,url,null);
+                         WatchListAPI.addToWatchlist(userData,name,image,null);
                          Navigator.pop(context);
                        }
                      ),
@@ -244,5 +272,6 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
            );
          });
    }
-   
+// End _confirmDialog Function
 }
+// Start _ShowDetailsPageState

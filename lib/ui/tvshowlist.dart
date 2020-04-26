@@ -5,26 +5,33 @@ import 'dart:async';
 import 'dart:convert';
 import 'showDetails.dart';
 
+// Start TvShowList
 class TvShowList extends StatefulWidget{
   @override
   _TvShowListState createState()=> _TvShowListState();
 }
+// End TvShowList
 
+// Start _TvShowListState
 class _TvShowListState extends State<TvShowList>{
-  Map data;
+  List data;
   List userData;
 
   Future getData() async {
-    http.Response response = await http.get("https://www.episodate.com/api/most-popular?page=1");
+    // API Connection
+    http.Response response = await http.get("http://api.tvmaze.com/schedule?date=2020-04-30");
+    //debugPrint(response.body);
     data = json.decode(response.body);
     setState(() {
-      userData = data["tv_shows"];
+      userData = data;
     });
+
   }
 
   @override
   void initState() {
     super.initState();
+    //get Show data
     getData();
   }
 
@@ -50,29 +57,42 @@ class _TvShowListState extends State<TvShowList>{
                                   children: <Widget>[
                                     CircleAvatar(
                                       radius: 30,
-                                      backgroundImage: NetworkImage(userData[index]["image_thumbnail_path"]),
+                                    // Show image
+                                    backgroundImage: userData[index]["show"]["image"] != null ?
+                                    NetworkImage(userData[index]["show"]["image"]["original"])
+                                        :AssetImage("assets/tv.jpg"),
                                     ),
 
-                                    SizedBox(width: 10.0),
+                                    SizedBox(width: 7.0),
                                     Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children:[
+                                          // Show Name
                                           Text(
-                                              "${userData[index]["name"]}",
+                                              "${userData[index]["show"]["name"]}",
                                               style: TextStyle(
                                                   fontFamily: 'Montserrat',
-                                                  fontSize: 9.0,
+                                                  fontSize: 8,
                                                   fontWeight: FontWeight.bold
                                               )
                                           ),
+                                          userData[index]["show"]["network"] != null ?
+                                          // Show Network
                                           Text(
-                                              "${userData[index]["network"]}",
+                                              "${userData[index]["show"]["network"]["name"]}",
                                               style: TextStyle(
                                                   fontFamily: 'Montserrat',
-                                                  fontSize: 12.0,
+                                                  fontSize: 11.0,
                                                   color: Colors.grey
                                               )
-                                          )
+                                          ):Text(
+                                              "AWS",
+                                              style: TextStyle(
+                                              fontFamily: 'Montserrat',
+                                              fontSize: 12.0,
+                                              color: Colors.grey
+                                            )
+                                          ),
                                         ]
                                     )
                                   ]
@@ -82,7 +102,8 @@ class _TvShowListState extends State<TvShowList>{
                               color: Colors.black,
                               onPressed: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => ShowDetailsPage(id:userData[index]["id"])
+                                  //Show id pass to showDetails page
+                                    builder: (context) => ShowDetailsPage(id:userData[index]["show"]["id"])
                                 ));
                               }
                           ),
@@ -94,8 +115,6 @@ class _TvShowListState extends State<TvShowList>{
 
     );
   }
-
-
-
 }
+// End _TvShowListState
 
