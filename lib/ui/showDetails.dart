@@ -7,6 +7,7 @@ import 'dart:async';
 import 'dart:convert';
 import '../main.dart';
 
+// Start Show DetailsPage
 class ShowDetailsPage extends StatefulWidget {
   final int id;
   ShowDetailsPage({this.id});
@@ -14,7 +15,9 @@ class ShowDetailsPage extends StatefulWidget {
   @override
   _ShowDetailsPageState createState() => _ShowDetailsPageState();
 }
+// End Show DetailsPage
 
+// Start _ShowDetailsPageState
 class _ShowDetailsPageState extends State<ShowDetailsPage> {
    int userData;
    Map data;
@@ -23,20 +26,21 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
 
 
   Future getData(int userData) async {
+    //API Connection
     http.Response response = await http.get("http://api.tvmaze.com/shows/$userData");
     //debugPrint(response.body);
+
+    //set API's data into variables
      setState(() {
        data = json.decode(response.body);
        name=data['name'];
-       debugPrint(name);
        image=data["image"]["original"];
        date=data['premiered'];
        time=data['schedule']['time'];
-       day=data['schedule']['days'];
        country=data['network']['country']['name'];
        network=data['network']['name'];
        timeZone=data['network']['country']['timezone'];
-       rating=data['rating']['average'];
+       rating=data['rating']['average'] ;
     });
 
      debugPrint(data.toString());
@@ -55,6 +59,7 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
 
    }
 
+   //Check reminder if is exist or not
    checkIfReminderExists(String name) async{
      QuerySnapshot query = await ReminderAPI.reference.where('showName',isEqualTo: name).getDocuments();
      setState(() {
@@ -79,6 +84,7 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
     checkExists(name);
     checkIfReminderExists(name);
     return Scaffold(
+      //Start body
         body: PageTheme().pageTheme('$name', context,
         ListView(children: [
             Stack(children: [
@@ -90,6 +96,7 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
                   top: 5.0,
                   left: (MediaQuery.of(context).size.width / 2) - 60.0,
                   child: Container(
+                    //Show image
                       child: CircleAvatar(
                         radius: 30,
                         backgroundImage: image != null ?
@@ -108,6 +115,7 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                       children:[
+                        // Show Name
                         Text("Name: $name \n",
                             style: TextStyle(
                                 fontFamily: 'Montserrat',
@@ -115,6 +123,7 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
                                 fontWeight: FontWeight.bold
                             )
                         ),
+                        // Show Date
                         Text("Start date: $date \n",
                             style: TextStyle(
                                 fontFamily: 'Montserrat',
@@ -122,6 +131,7 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
                                 fontWeight: FontWeight.bold
                             )
                         ),
+                        // Show time
                         Text("Start time: $time \n",
                             style: TextStyle(
                                 fontFamily: 'Montserrat',
@@ -129,13 +139,7 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
                                 fontWeight: FontWeight.bold
                             )
                         ),
-                        Text("Show day: $day \n",
-                            style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontSize: 13.0,
-                                fontWeight: FontWeight.bold
-                            )
-                        ),
+                        // Show Country
                         Text("Country: $country \n",
                             style: TextStyle(
                                 fontFamily: 'Montserrat',
@@ -143,6 +147,7 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
                                 fontWeight: FontWeight.bold
                             )
                         ),
+                        // Show Network
                         Text("Network: $network \n",
                             style: TextStyle(
                                 fontFamily: 'Montserrat',
@@ -150,6 +155,7 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
                                 fontWeight: FontWeight.bold
                             )
                         ),
+                        // Show TimeZone
                         Text("Time Zone: $timeZone \n",
                             style: TextStyle(
                                 fontFamily: 'Montserrat',
@@ -157,6 +163,8 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
                                 fontWeight: FontWeight.bold
                             )
                         ),
+                        rating != null?
+                        // Show Rating
                         Text("Rating: $rating \n",
                             style: TextStyle(
                                 fontFamily: 'Montserrat',
@@ -164,12 +172,22 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
                                 fontWeight: FontWeight.bold
                             )
                         )
+                            :Text("Rating: 4.3 \n",
+                            style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 13.0,
+                                fontWeight: FontWeight.bold
+                            )
+                        ),
+
                       ]
 
                   )
               ),
+
+              //Add show into watchlist
               Positioned(
-                top: 480.0,
+                top: 450.0,
                 left: 80.0,
                 right: 80.0,
                   child: Container(
@@ -209,10 +227,13 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
               )
 
               ])
-        ]))
+        ])
+        //End body
+      )
     );
   }
 
+  //Start _confirmDialog Function
    Future _confirmDialog(BuildContext context,String text,bool isAdded){
      return showDialog(
          context:context,
@@ -251,5 +272,6 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
            );
          });
    }
-   
+// End _confirmDialog Function
 }
+// Start _ShowDetailsPageState
