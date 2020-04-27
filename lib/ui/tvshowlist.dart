@@ -14,16 +14,19 @@ class TvShowList extends StatefulWidget{
 
 // Start _TvShowListState
 class _TvShowListState extends State<TvShowList>{
-  List data;
-  List userData;
 
+  TextEditingController controller = new TextEditingController();
+  List<Shows> _searchResult = [];
+  List<Shows> _showDetails = [];
   Future getData() async {
     // API Connection
     http.Response response = await http.get("http://api.tvmaze.com/schedule?date=2020-04-30");
     //debugPrint(response.body);
-    data = json.decode(response.body);
+    final data = json.decode(response.body);
     setState(() {
-      userData = data;
+      for (Map show in data) {
+        _showDetails.add(Shows.fromJson(show));
+      }
     });
 
   }
@@ -33,86 +36,139 @@ class _TvShowListState extends State<TvShowList>{
     super.initState();
     //get Show data
     getData();
+    print('count ${_showDetails.length}');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageTheme().pageTheme('TV Shows', context,
-          ListView.separated(
-            separatorBuilder:(context,builder) =>Divider(
-              color: Colors.grey,
-              thickness: 0.5,
+      body: PageTheme().pageTheme('TV Shows', context,null,
+        new Column(
+            children: <Widget>[
+             new Container(
+             color: Theme.of(context).primaryColor,
+              child: new Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: new Card(
+                  child: new ListTile(
+                   leading: new Icon(Icons.search),
+                   title: new TextField(
+                   controller: controller,
+                   decoration: new InputDecoration(
+                    hintText: 'Search', border: InputBorder.none),
+                    onChanged: onSearchTextChanged,
+              ),
+                    trailing: new IconButton(icon: new Icon(Icons.cancel), onPressed: () {
+                    controller.clear();
+                    onSearchTextChanged('');
+              },),
+            ),
           ),
-              padding: EdgeInsets.only(top: 30.0, left: 10.0, bottom: 20),
-              itemCount: userData == null ? 0 : userData.length,
-              itemBuilder: (BuildContext context, int index){
-                return Padding(
-                    padding: EdgeInsets.only(left: 20.0, right: 10.0, top: 5),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                              child: Row(
-                                  children: <Widget>[
-                                    CircleAvatar(
-                                      radius: 30,
-                                    // Show image
-                                    backgroundImage: userData[index]["show"]["image"] != null ?
-                                    NetworkImage(userData[index]["show"]["image"]["original"])
-                                        :AssetImage("assets/tv.jpg"),
-                                    ),
+        ),
+      ),  new Expanded(
+        child: _searchResult.length != 0 || controller.text.isNotEmpty
+            ? listView(_searchResult):listView(_showDetails)
+              )
+    ]
+    )
+      )
+    );
+  }
 
-                                    SizedBox(width: 7.0),
-                                    Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children:[
-                                          // Show Name
-                                          Text(
-                                              "${userData[index]["show"]["name"]}",
-                                              style: TextStyle(
-                                                  fontFamily: 'Montserrat',
-                                                  fontSize: 8,
-                                                  fontWeight: FontWeight.bold
-                                              )
-                                          ),
-                                          userData[index]["show"]["network"] != null ?
-                                          // Show Network
-                                          Text(
-                                              "${userData[index]["show"]["network"]["name"]}",
-                                              style: TextStyle(
-                                                  fontFamily: 'Montserrat',
-                                                  fontSize: 11.0,
-                                                  color: Colors.grey
-                                              )
-                                          ):Text(
-                                              "AWS",
-                                              style: TextStyle(
-                                              fontFamily: 'Montserrat',
-                                              fontSize: 12.0,
-                                              color: Colors.grey
-                                            )
-                                          ),
-                                        ]
+  Widget listView(List<Shows> list){
+    return new ListView.separated(
+        separatorBuilder:(context,builder) =>Divider(
+          color: Colors.grey,
+          thickness: 0.5,
+        ),
+        padding: EdgeInsets.only(top: 30.0, left: 10.0, bottom: 20),
+        itemCount: list.length,
+        itemBuilder: (BuildContext context, int index){
+          return Padding(
+              padding: EdgeInsets.only(left: 20.0, right: 10.0, top: 5),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Container(
+                        child: Row(
+                            children: <Widget>[
+                              CircleAvatar(
+                                radius: 30,
+                                // Show image
+                                backgroundImage: NetworkImage(list[index].image)
+                              ),
+
+                              SizedBox(width: 7.0),
+                              Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children:[
+                                    // Show Name
+                                    Text(
+                                        "${list[index].showName}",
+                                        style: TextStyle(
+                                            fontFamily: 'Montserrat',
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.bold
+                                        )
+                                    ),
+                                    // Show Network
+                                    Text(
+                                        "${list[index].networkName}",
+                                        style: TextStyle(
+                                            fontFamily: 'Montserrat',
+                                            fontSize: 11.0,
+                                            color: Colors.grey
+                                        )
                                     )
                                   ]
-                              )),
-                          IconButton(
-                              icon: Icon(Icons.arrow_forward_ios,color: Colors.grey,size: 20,),
-                              color: Colors.black,
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                  //Show id pass to showDetails page
-                                    builder: (context) => ShowDetailsPage(id:userData[index]["show"]["id"])
-                                ));
-                              }
-                          ),
-                        ]
-                    )
-                );
-              }
-          ) ),
+                              )
+                            ]
+                        )),
+                    IconButton(
+                        icon: Icon(Icons.arrow_forward_ios,color: Colors.grey,size: 20,),
+                        color: Colors.black,
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            //Show id pass to showDetails page
+                              builder: (context) => ShowDetailsPage(id:list[index].id,airStamp:DateTime.parse(list[index].airstamp).toLocal())
+                          ));
+                        }
+                    ),
+                  ]
+              )
+          );
+        }
+    );
+  }
+  onSearchTextChanged(String text) async {
+    _searchResult.clear();
+    if (text.isEmpty) {
+      setState(() {});
+      return;
+    }
 
+    _showDetails.forEach((show) {
+      if (show.showName.contains(text))
+        _searchResult.add(show);
+    });
+
+    setState(() {});
+  }
+}
+
+class Shows {
+  final String showName,airstamp,image,networkName;
+  final int id;
+
+  Shows({this.id, this.showName,this.image,this.airstamp,this.networkName});
+
+  factory Shows.fromJson(Map<String, dynamic> json) {
+    return new Shows(
+        id: json['show']['id'],
+        networkName:json['show']['network']==null?'AWS':json['show']['network']['name'],
+        showName: json['show']['name'],
+        image:json['show']['image']==null?'assets/tv.jpg':json['show']['image']['original'],
+      airstamp:json['airstamp']
     );
   }
 }

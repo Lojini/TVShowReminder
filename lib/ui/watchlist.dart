@@ -16,12 +16,14 @@ class WatchListPage extends StatefulWidget {
 
 class _WatchListPageState extends State<WatchListPage> {
   bool isButtonDisabled = false;
-
+  Map data;
+  String date,time,timeZone;
+  DateTime dateTime;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: PageTheme().pageTheme('Watch List', context,
+        body: PageTheme().pageTheme('Watch List', context,null,
           StreamBuilder(
             stream: WatchListAPI.watchlistStream,
             builder: (BuildContext context,AsyncSnapshot<QuerySnapshot> snapshot){
@@ -37,7 +39,7 @@ class _WatchListPageState extends State<WatchListPage> {
                          return new Stack(
                         children: <Widget>[
                           Container(
-                            margin: EdgeInsets.only(top: 40, bottom: 30),
+                            margin: EdgeInsets.only(top: 50, bottom: 60),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
                               image: DecorationImage(
@@ -56,8 +58,8 @@ class _WatchListPageState extends State<WatchListPage> {
                           ),
                           Positioned(
                               right: 7.0,
-                              top: 50,
-                                 child:list['reminder']==null?GestureDetector(
+                              top: 60,
+                                 child:list['reminder']==null||list['reminder']==false?GestureDetector(
                                    onTap: (){
                                      showDialog(
                                        context: context,
@@ -66,8 +68,7 @@ class _WatchListPageState extends State<WatchListPage> {
                                                documentId:list.documentID,
                                                reminder: Reminder(
                                                    showName: list['showName'],
-                                                   showDate: '2020-09-3',
-                                                   showTime: '05.30 P.M',
+                                                   showDateTime:list['dateTime'],
                                                    imageUrl: list['imageUrl'])
                                            ),
                                      );
@@ -110,20 +111,21 @@ class _WatchListPageState extends State<WatchListPage> {
         children: <Widget>[
           Image.asset('assets/sad_Tv.png',
             height: 100,
-            width: 100,),
-          Text('You have no shows!!',textAlign: TextAlign.justify,
+            width: 150,),
+          Text('You have no shows!!',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 28,
-                color: Colors.grey,
+                fontSize: 20,
+                color: Color(0xFFd2d9d9),
                 fontFamily: 'Montserrat'
-            ),
+            )
           ),
-          Text('Add your favourite show.. ',
+          SizedBox(height: 10,),
+          Text('Add to watchlist \n from tv shows',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 14,
-                color: Colors.grey,
+                fontSize: 16,
+                color: Color(0xFFd2d9d9),
                 fontFamily: 'Montserrat'
             ),
           ),

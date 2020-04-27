@@ -16,7 +16,7 @@ class _HelpPageState extends State<HelpPage>{
       padding: EdgeInsets.all(8.0),
       child: Text(
         'How Do I Follow a show?',
-        style: TextStyle(fontSize: 28.0, fontFamily:'Montserrat',color: Colors.black),
+        style: TextStyle(fontSize: 28.0, fontFamily:'Montserrat'),
       ),
     );
 
@@ -24,7 +24,7 @@ class _HelpPageState extends State<HelpPage>{
       padding: EdgeInsets.all(8.0),
       child: Text(
         '1. Tap the title of a show or the show poster to access the show pages.',
-        style: TextStyle(fontSize: 16.0,fontFamily:'Montserrat', color: Colors.black),
+        style: TextStyle(fontSize: 16.0,fontFamily:'Montserrat'),
       ),
     );
 
@@ -32,7 +32,7 @@ class _HelpPageState extends State<HelpPage>{
       padding: EdgeInsets.all(8.0),
       child: Text(
         '2. There will be a blue button at the bottom of the page that says "Add to Watchlist".',
-        style: TextStyle(fontSize: 16.0, fontFamily:'Montserrat',color: Colors.black),
+        style: TextStyle(fontSize: 16.0, fontFamily:'Montserrat'),
       ),
     );
 
@@ -40,7 +40,7 @@ class _HelpPageState extends State<HelpPage>{
       padding: EdgeInsets.all(8.0),
       child: Text(
         '3. Tap the button to follow the show.',
-        style: TextStyle(fontSize: 16.0, fontFamily:'Montserrat',color: Colors.black),
+        style: TextStyle(fontSize: 16.0, fontFamily:'Montserrat'),
       ),
     );
 
@@ -56,8 +56,7 @@ class _HelpPageState extends State<HelpPage>{
     );
 
     return Scaffold(
-        body:PageTheme().pageTheme('Help', context, content,
-    ));
+        body:PageTheme().pageTheme('Help', context, null,content));
   }
 }
 

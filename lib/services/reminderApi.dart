@@ -10,9 +10,9 @@ class ReminderAPI{
       Firestore.instance.runTransaction((Transaction transaction) async{
         await reference.add({
           "name":reminder.showName,
+          "watchlistId":reminder.watchlistId,
           "url" :reminder.imageUrl,
-          "date":reminder.showDate,
-          "time":reminder.showTime,
+          "showDateTime":reminder.showDateTime,
           "start":reminder.reminderStart
         });
       });

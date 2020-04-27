@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:tv_reminder/models/reminder.dart';
 import 'package:tv_reminder/services/reminderApi.dart';
+import 'package:tv_reminder/services/watchListApi.dart';
 import 'package:tv_reminder/ui/customReminderDialog.dart';
 import '../main.dart';
 
@@ -28,99 +30,103 @@ class _ReminderState extends State<ReminderPage>{
 
   Widget buildList(BuildContext context,List<DocumentSnapshot> snapshot){
     return ListView(
-      children:snapshot.map((data) => buildListItem(context,data)).toList(),
+        children:snapshot.map((data) => buildListItem(context,data)).toList(),
     );
   }
 
-  Widget buildListItem(BuildContext context,DocumentSnapshot data){
+  //build each item in the list
+  Widget buildListItem(BuildContext context,DocumentSnapshot data) {
     final reminder = Reminder.fromSnapshot(data);
-    return Padding(
-      key: ValueKey(data.documentID),
-      padding: EdgeInsets.only(left:0.0),
-      child: InkWell(
-        onTap: () {
-           showDialog(
-             context: context,
-             builder: (context)=> CustomReminderDialog(
-                                documentId:data.documentID,
-                                reminder:Reminder(
-                                 showName: reminder.showName,
-                                 imageUrl: reminder.imageUrl,
-                                 showDate: reminder.showDate,
-                                 showTime: reminder.showTime,
-                                 reminderStart: reminder.reminderStart)
-           ),
-           );
-        },
-          child:Column(
-            children: <Widget>[
-              Container(
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Hero(
-                      tag: reminder.imageUrl,
-                      child: CircleAvatar(
-                        radius:40.0 ,
-                        backgroundImage: NetworkImage(reminder.imageUrl),
-                      ),
-                    ),
-                    SizedBox(width: 5,),
-
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          reminder.showName,
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize:18.0,
-                            fontWeight: FontWeight.bold
-                          ),
-                        ),
-                        SizedBox(height: 10,),
-                        Text(
-                          'On ${reminder.showDate} at ${reminder.showTime}',
-                              style:TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontSize: 15.0,
-                                color: Colors.grey
-                              )
-                        ),
-                        SizedBox(height: 10,),
-                        Row(
-                          children: <Widget>[
-                            Icon(Icons.notifications_none,color: Colors.grey,),
-                            Text('Remind before ${reminder.reminderStart}',
-                            style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontSize: 15.0,
-                                color: Colors.grey
-                            ),)
+    return Container(
+        child: InkWell(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (context) =>
+                  CustomReminderDialog(
+                      documentId: data.documentID,
+                      reminder: Reminder(
+                          showName: reminder.showName,
+                          imageUrl: reminder.imageUrl,
+                          showDateTime: reminder.showDateTime,
+                          reminderStart: reminder.reminderStart)
+                  ),
+            );
+          },
+            child:Column(
+                children: <Widget>[
+                  Container(
+                    child: Row(
+                       children: <Widget>[
+                            Hero(
+                              tag: reminder.imageUrl,
+                              child: CircleAvatar(
+                                radius: 30.0,
+                                backgroundImage: NetworkImage(
+                                    reminder.imageUrl),
+                              ),
+                            ),
+                            SizedBox(width: 10,),
+                            Flexible(
+                            child:Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  reminder.showName,
+                                  style: TextStyle(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 13.0,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                                SizedBox(height: 8,),
+                                Text(
+                                    '${DateFormat.yMMMMd("en_US")
+                                        .add_jm()
+                                        .format(
+                                        reminder.showDateTime.toDate())}',
+                                    style: TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 13.0,
+                                        color: Colors.grey
+                                    )
+                                ),
+                                SizedBox(height: 8,),
+                                Row(
+                                  children: <Widget>[
+                                    Icon(Icons.notifications_none,
+                                      color: Colors.grey, size: 20,),
+                                    Text(
+                                      'Remind before ${reminder.reminderStart}',
+                                      style: TextStyle(
+                                          fontFamily: 'Montserrat',
+                                          fontSize: 13.0,
+                                          color: Colors.grey
+                                      ),)
+                                  ],
+                                )
+                              ],
+                            ),
+                            ),
+                         IconButton(
+                           icon: Icon(
+                             Icons.delete_outline, size: 30, color: Colors.grey,),
+                           onPressed: () {
+                             _confirmDialog(context, data.documentID,reminder.watchlistId);
+                           },
+                         ),
                           ],
-                        )
-                      ],
-                    ),
-
-                    IconButton(
-                     icon:Icon(Icons.delete_outline,size: 35,color: Colors.grey,),
-                      onPressed: (){
-                          _confirmDialog(context,data.documentID);
-                      },
-                    ),
-                  ],
+                        ),
+                      ),
+                  SizedBox(height: 10,),
+                  Divider(color: Colors.grey, thickness: 0.5,),
+                    ]
                 ),
-              ),
-              SizedBox(height: 10,),
-              Divider(color: Colors.grey, thickness: 0.5,),
-            ],
-          )
-    )
-    );
+          ),
+        );
   }
-
-  Future _confirmDialog(BuildContext context,String documentID){
+  //alert dialog to confirm before deletion
+  Future _confirmDialog(BuildContext context,String documentID,String watchListId){
     return showDialog(
         context:context,
         builder: (context) {
@@ -136,6 +142,7 @@ class _ReminderState extends State<ReminderPage>{
                     child:Text('Yes,Delete it!'),
                     onPressed: (){
                      ReminderAPI.deleteReminder(documentID);
+                     WatchListAPI.updateWatchlist(watchListId, false);
                      Navigator.pop(context);
                  },
                ),
@@ -154,6 +161,7 @@ class _ReminderState extends State<ReminderPage>{
         });
   }
 
+  //to display when the reminder list is empty
   Widget emptyPage(){
     return Container(
       child: Column(
@@ -161,20 +169,21 @@ class _ReminderState extends State<ReminderPage>{
         children: <Widget>[
           Image.asset('assets/sad_Tv.png',
           height: 100,
-          width: 100,),
+          width: 150,),
           Text('You have no reminder!!',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 28,
-                color: Colors.grey,
+                fontSize: 20,
+                color: Color(0xFFd2d9d9),
                 fontFamily: 'Montserrat'
             ),
           ),
-          Text('Add your reminder from watchlist ',
+          SizedBox(height: 10,),
+          Text('Add your reminder \n  from watchlist ',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 14,
-                color: Colors.grey,
+                fontSize: 16,
+                color: Color(0xFFd2d9d9),
                 fontFamily: 'Montserrat'
             ),
           ),
@@ -185,7 +194,7 @@ class _ReminderState extends State<ReminderPage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: PageTheme().pageTheme('Reminder', context,
+        body: PageTheme().pageTheme('Reminder', context,null,
             ListView(
               primary: false,
                padding: EdgeInsets.only(left: 25.0,right: 20.0),

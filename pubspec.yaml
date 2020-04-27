@@ -18,6 +18,10 @@ environment:
 
 dependencies:
   cloud_firestore: ^0.13.0+1
+  intl: ^0.16.1
+  smooth_star_rating: ^1.0.4+2
+  scheduled_notifications: ^1.0.0
+  flutter_local_notifications: ^1.4.1
   curved_navigation_bar: ^0.3.2
   flutter_swiper: ^1.1.6
   flutter:

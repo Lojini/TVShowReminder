@@ -17,8 +17,8 @@ class _SplashState extends State<Splash>{
             decoration: BoxDecoration(
               gradient: new LinearGradient(
                 colors: [
-                  const Color(0xFF00ACC1),
-                  const Color(0xFF80DEEA),
+                const Color(0xFF00ACC1),
+                const Color(0xFF80DEEA),
                 ],
                 begin: Alignment.centerRight,
                 end: new Alignment(-1.0, -1.0),
