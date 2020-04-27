@@ -26,7 +26,7 @@ class _BottomNavigationBarState extends State<BottomNavigationBarPage> {
         bottomNavigationBar: CurvedNavigationBar(
           height: 50,
           color: Colors.white,
-          backgroundColor: Color(0xFF42CCC8),
+          backgroundColor: Color(0xFF00ACC1),
           items: <Widget>[
             Icon(Icons.list,size: 30,),
             Icon(Icons.tv,size: 30,),

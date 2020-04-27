@@ -1,16 +1,12 @@
-import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:intl/intl.dart';
 import 'package:tv_reminder/models/reminder.dart';
 import 'package:tv_reminder/services/watchListApi.dart';
 import 'package:tv_reminder/ui/showDetails.dart';
 import '../main.dart';
 import 'customReminderDialog.dart';
-import 'package:http/http.dart' as http;
 
 
 class WatchListPage extends StatefulWidget {
@@ -27,7 +23,7 @@ class _WatchListPageState extends State<WatchListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: PageTheme().pageTheme('Watch List', context,
+        body: PageTheme().pageTheme('Watch List', context,null,
           StreamBuilder(
             stream: WatchListAPI.watchlistStream,
             builder: (BuildContext context,AsyncSnapshot<QuerySnapshot> snapshot){
@@ -43,7 +39,7 @@ class _WatchListPageState extends State<WatchListPage> {
                          return new Stack(
                         children: <Widget>[
                           Container(
-                            margin: EdgeInsets.only(top: 40, bottom: 30),
+                            margin: EdgeInsets.only(top: 50, bottom: 60),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
                               image: DecorationImage(
@@ -62,10 +58,9 @@ class _WatchListPageState extends State<WatchListPage> {
                           ),
                           Positioned(
                               right: 7.0,
-                              top: 50,
-                                 child:list['reminder']==null?GestureDetector(
+                              top: 60,
+                                 child:list['reminder']==null||list['reminder']==false?GestureDetector(
                                    onTap: (){
-                                     dateTime =DateTime.parse(list['dateTime']);
                                      showDialog(
                                        context: context,
                                        builder: (context) =>
@@ -73,7 +68,7 @@ class _WatchListPageState extends State<WatchListPage> {
                                                documentId:list.documentID,
                                                reminder: Reminder(
                                                    showName: list['showName'],
-                                                   showDateTime:dateTime.toLocal(),
+                                                   showDateTime:list['dateTime'],
                                                    imageUrl: list['imageUrl'])
                                            ),
                                      );
@@ -117,16 +112,16 @@ class _WatchListPageState extends State<WatchListPage> {
           Image.asset('assets/sad_Tv.png',
             height: 100,
             width: 150,),
-          Text('You have no reminder!!',
+          Text('You have no shows!!',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
                 color: Color(0xFFd2d9d9),
                 fontFamily: 'Montserrat'
-            ),
+            )
           ),
           SizedBox(height: 10,),
-          Text('Add to watchlist from tv shows',
+          Text('Add to watchlist \n from tv shows',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,

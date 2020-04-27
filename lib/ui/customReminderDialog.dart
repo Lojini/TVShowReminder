@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tv_reminder/models/reminder.dart';
@@ -10,8 +11,9 @@ import 'notification.dart';
 class CustomReminderDialog extends StatefulWidget{
   final Reminder reminder;
   final String documentId;
+  final Timestamp showDateTime;
 
-  CustomReminderDialog({Key key,this.documentId,this.reminder}):super(key:key);
+  CustomReminderDialog({Key key,this.documentId,this.reminder,this.showDateTime}):super(key:key);
 
  @override
   _CustomReminderDialogState createState()=>_CustomReminderDialogState();
@@ -20,19 +22,20 @@ class CustomReminderDialog extends StatefulWidget{
 class _CustomReminderDialogState extends State<CustomReminderDialog>{
   bool _isButtonDisabled= true;
    String  dropdownValue;
-   NotificationManager manager;
+  NotificationManager manager;
 
   @override
   void initState(){
     super.initState();
     if(widget.documentId!=null)
     dropdownValue = widget.reminder.reminderStart;
+    manager=NotificationManager();
   }
 
   @override
   Widget build(BuildContext context){
-    String date= DateFormat.yMMMMd("en_US").format(widget.reminder.showDateTime);
-    String time= DateFormat.jm().format(widget.reminder.showDateTime);
+    var date= DateFormat.yMMMMd("en_US").format(widget.reminder.showDateTime.toDate().toLocal());
+    var time= DateFormat.jm().format(widget.reminder.showDateTime.toDate().toLocal());
     return Dialog(
       elevation: 0.0,
       backgroundColor: Colors.transparent,
@@ -61,7 +64,8 @@ class _CustomReminderDialogState extends State<CustomReminderDialog>{
                   child:Text(
                     widget.reminder.showName,
                     style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 14,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Montserrat'
                     ),
@@ -74,15 +78,17 @@ class _CustomReminderDialogState extends State<CustomReminderDialog>{
                     children:<Widget>[
                       Text('Reminder',
                         style: TextStyle(
-                          fontSize: 18.0,
+                          color: Colors.black,
+                          fontSize: 14.0,
                         ),),
                       SizedBox(height: 20,),
                       Row(
                         children: <Widget>[
-                          Icon(Icons.calendar_today,size: 30,color: Colors.grey,),
+                          Icon(Icons.calendar_today,size: 20,color: Colors.grey,),
                           SizedBox(width: 10,),
                           Text(date,
                             style: TextStyle(
+                              color: Colors.black,
                               fontSize: 14,
                             ),),
                         ],
@@ -90,10 +96,11 @@ class _CustomReminderDialogState extends State<CustomReminderDialog>{
                       SizedBox(height: 20),
                       Row(
                         children: <Widget>[
-                          Icon(Icons.access_time,size: 30,color: Colors.grey,),
+                          Icon(Icons.access_time,size: 20,color: Colors.grey,),
                           SizedBox(width: 10,),
                           Text(time,
                             style: TextStyle(
+                              color: Colors.black,
                               fontSize: 14,
                             ),),
                         ],
@@ -103,7 +110,8 @@ class _CustomReminderDialogState extends State<CustomReminderDialog>{
                         children: <Widget>[
                           Text('Remind me before',
                               style: TextStyle(
-                                fontSize: 14.0,)
+                                color: Colors.black,
+                                fontSize: 12.0,)
                           ),
                           SizedBox(width: 10,),
                           DropdownButton<String>(
@@ -149,6 +157,7 @@ class _CustomReminderDialogState extends State<CustomReminderDialog>{
                         int remind;
                         ReminderAPI.addReminder(new Reminder(
                             showName: widget.reminder.showName,
+                            watchlistId:widget.documentId,
                             imageUrl: widget.reminder.imageUrl,
                             showDateTime: widget.reminder.showDateTime,
                             reminderStart:dropdownValue));
@@ -165,7 +174,7 @@ class _CustomReminderDialogState extends State<CustomReminderDialog>{
                           case '1 hour':
                             remind = 60;
                         }
-                         manager.scheduleNotification(widget.reminder.showName,widget.reminder.showDateTime,remind);
+                        manager.scheduleReminder(widget.reminder.showName,widget.reminder.showDateTime.toDate().toLocal(),remind);
                         WatchListAPI.updateWatchlist(widget.documentId, true);
                         Navigator.pop(context);
                       }
@@ -219,4 +228,5 @@ class _CustomReminderDialogState extends State<CustomReminderDialog>{
       ),
     );
   }
+
 }

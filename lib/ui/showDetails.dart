@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:tv_reminder/services/reminderApi.dart';
 import 'package:tv_reminder/services/watchListApi.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'dart:async';
 import 'dart:convert';
 import '../main.dart';
@@ -10,7 +13,7 @@ import '../main.dart';
 // Start Show DetailsPage
 class ShowDetailsPage extends StatefulWidget {
   final int id;
-  final String airStamp;
+  final DateTime airStamp;
   ShowDetailsPage({this.id,this.airStamp});
 
   @override
@@ -22,8 +25,10 @@ class ShowDetailsPage extends StatefulWidget {
 class _ShowDetailsPageState extends State<ShowDetailsPage> {
    int userData;
    Map data;
-   String name, image, date, time, day, country, network, timeZone, rating, documentId,reminderId;
+   String name, image, day, country, network, documentId,reminderId;
+   double rating=4.3;
    bool showExists=false;
+   var date,time;
 
 
   Future getData(int userData) async {
@@ -36,12 +41,11 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
        data = json.decode(response.body);
        name=data['name'];
        image=data["image"]["original"];
-       date=data['premiered'];
-       time=data['schedule']['time'];
        country=data['network']['country']['name'];
        network=data['network']['name'];
-       timeZone=data['network']['country']['timezone'];
-       rating=data['rating']['average'] ;
+       date= DateFormat.yMMMMd("en_US").format(widget.airStamp);
+       time= DateFormat.jm().format(widget.airStamp);
+       rating=data['rating']['average']==null?double.parse(data['rating']['average']):4.3;
     });
 
      debugPrint(data.toString());
@@ -60,9 +64,9 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
 
    }
 
-   //Check reminder if is exist or not
+   //Check reminder if exist or not
    checkIfReminderExists(String name) async{
-     QuerySnapshot query = await ReminderAPI.reference.where('showName',isEqualTo: name).getDocuments();
+     QuerySnapshot query = await ReminderAPI.reference.where('name',isEqualTo: name).getDocuments();
      setState(() {
        if(query.documents.length==1) {
          reminderId=query.documents[0].documentID;
@@ -86,7 +90,7 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
     checkIfReminderExists(name);
     return Scaffold(
       //Start body
-        body: PageTheme().pageTheme('$name', context,
+        body: PageTheme().pageTheme('$name', context,true,
         ListView(children: [
             Stack(children: [
               Container(
@@ -116,7 +120,20 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                       children:[
-                        // Show Name
+                        Align(
+                          heightFactor: 2,
+                          alignment: Alignment.center,
+                         child:SmoothStarRating(
+                          rating: rating,
+                          allowHalfRating: false,
+                          filledIconData: Icons.star,
+                          halfFilledIconData: Icons.star_half,
+                          color: Colors.amber,
+                          size: 30,
+                          borderColor: Colors.amber,
+                        ),
+                        ),
+                        SizedBox(height: 20,),
                         Text("Name: $name \n",
                             style: TextStyle(
                                 fontFamily: 'Montserrat',
@@ -156,30 +173,6 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
                                 fontWeight: FontWeight.bold
                             )
                         ),
-                        // Show TimeZone
-                        Text("Time Zone: $timeZone \n",
-                            style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontSize: 13.0,
-                                fontWeight: FontWeight.bold
-                            )
-                        ),
-                        rating != null?
-                        // Show Rating
-                        Text("Rating: $rating \n",
-                            style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontSize: 13.0,
-                                fontWeight: FontWeight.bold
-                            )
-                        )
-                            :Text("Rating: 4.3 \n",
-                            style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontSize: 13.0,
-                                fontWeight: FontWeight.bold
-                            )
-                        ),
 
                       ]
 
@@ -188,9 +181,9 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
 
               //Add show into watchlist
               Positioned(
-                top: 450.0,
-                left: 80.0,
-                right: 80.0,
+                  top: 450.0,
+                  left: 80.0,
+                  right: 80.0,
                   child: Container(
                     height: 50.0,
                     child: RaisedButton(
@@ -210,15 +203,20 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
                             borderRadius: BorderRadius.circular(30.0)
                         ),
                         child: Container(
-                          constraints: BoxConstraints(maxWidth: 200.0, minHeight: 50.0),
+                          constraints: BoxConstraints(maxWidth: 400.0, minHeight: 50.0),
                           alignment: Alignment.center,
-                          child: Text(
+                          child: showExists?Text(
+                          "Added to watchlist",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.white
+                          ),
+                        ):Text(
                             "Add to Watchlist",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: Colors.white
                             ),
-
                           ),
                         ),
                       ),
@@ -235,45 +233,6 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
   }
 
   //Start _confirmDialog Function
-   Future _confirmDialog(BuildContext context,String text,bool isAdded){
-     return showDialog(
-         context:context,
-         builder: (context) {
-           return AlertDialog(
-             title: Align(alignment:Alignment.topLeft,child:Icon(Icons.favorite,color: Colors.red)),
-             content:Text(text),
-             actions: <Widget>[
-               Row(
-                   mainAxisAlignment: MainAxisAlignment.start,
-                   children:<Widget>[
-                     RaisedButton(
-                       color: Colors.cyan[600],
-                       child:Text('Yes'),
-                       onPressed: isAdded?(){
-                         WatchListAPI.deleteWatchlist(documentId);
-                         ReminderAPI.deleteReminder(reminderId);
-                         Navigator.pop(context);
-                       }:
-                       (){
-                         WatchListAPI.addToWatchlist(userData,name,image,null);
-                         Navigator.pop(context);
-                       }
-                     ),
-                     SizedBox(width: 10,),
-                     RaisedButton(
-                       color: Colors.red,
-                       child: Text('Cancel'),
-                       onPressed: (){
-                         Navigator.pop(context);
-                       },
-                     )
-                   ]
-               )
-             ],
-           );
-         });
-   }
-// End _confirmDialog Function
   Future _confirmDialog(BuildContext context,String text,bool isAdded){
     return showDialog(
         context:context,
@@ -312,6 +271,7 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
           );
         });
   }
+// End _confirmDialog Function
 
 }
 // Start _ShowDetailsPageState

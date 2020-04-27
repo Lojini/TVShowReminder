@@ -5,6 +5,7 @@ class WatchList{
   String showName;
   String imageUrl;
   bool reminder;
+  DateTime showDateTime;
   DocumentReference reference;
 
   WatchList({this.showId,this.showName,this.imageUrl,this.reminder});
@@ -14,6 +15,7 @@ class WatchList{
         assert(map['showId']!=null),
         showId= map['showId'],
         showName=map['showName'],
+        showDateTime=map['showDateTime'],
         imageUrl=map['imageUrl'],
         reminder=map['reminder'];
 
@@ -23,6 +25,7 @@ class WatchList{
   toJson(){
     return {'showId':showId,
             'showName':showName,
+            'showDateTime':showDateTime,
             'imageUrl':imageUrl,
             'reminder':reminder
     };
