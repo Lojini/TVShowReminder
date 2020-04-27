@@ -104,6 +104,7 @@ class _TvShowListState extends State<TvShowList>{
                                 Navigator.of(context).push(MaterialPageRoute(
                                   //Show id pass to showDetails page
                                     builder: (context) => ShowDetailsPage(id:userData[index]["show"]["id"])
+                                    builder: (context) => ShowDetailsPage(id:userData[index]["show"]["id"],airStamp:userData[index]["air_stamp"])
                                 ));
                               }
                           ),

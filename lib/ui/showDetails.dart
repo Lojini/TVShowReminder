@@ -10,7 +10,8 @@ import '../main.dart';
 // Start Show DetailsPage
 class ShowDetailsPage extends StatefulWidget {
   final int id;
-  ShowDetailsPage({this.id});
+  final String airStamp;
+  ShowDetailsPage({this.id,this.airStamp});
 
   @override
   _ShowDetailsPageState createState() => _ShowDetailsPageState();
@@ -45,17 +46,17 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
 
      debugPrint(data.toString());
   }
-   checkExists(String show) async{
-     QuerySnapshot queryName = await WatchListAPI.reference.where('showName',isEqualTo: show).getDocuments();
-     setState(() {
-       if(queryName.documents.length==1) {
-         showExists = true;
-         documentId=queryName.documents[0].documentID;
-       }
-       else {
-         showExists = false;
-       }
-     });
+  checkExists(String show) async{
+    QuerySnapshot queryName = await WatchListAPI.reference.where('showName',isEqualTo: show).getDocuments();
+    setState(() {
+      if(queryName.documents.length==1) {
+        showExists = true;
+        documentId=queryName.documents[0].documentID;
+      }
+      else {
+        showExists = false;
+      }
+    });
 
    }
 
@@ -68,7 +69,7 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
        }
      });
 
-   }
+  }
 
   @override
   void initState() {
@@ -273,5 +274,44 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
          });
    }
 // End _confirmDialog Function
+  Future _confirmDialog(BuildContext context,String text,bool isAdded){
+    return showDialog(
+        context:context,
+        builder: (context) {
+          return AlertDialog(
+            title: Align(alignment:Alignment.topLeft,child:Icon(Icons.favorite,color: Colors.red)),
+            content:Text(text),
+            actions: <Widget>[
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children:<Widget>[
+                    RaisedButton(
+                        color: Colors.cyan[600],
+                        child:Text('Yes'),
+                        onPressed: isAdded?(){
+                          WatchListAPI.deleteWatchlist(documentId);
+                          ReminderAPI.deleteReminder(reminderId);
+                          Navigator.pop(context);
+                        }:
+                            (){
+                          WatchListAPI.addToWatchlist(userData,name,image,widget.airStamp,null);
+                          Navigator.pop(context);
+                        }
+                    ),
+                    SizedBox(width: 10,),
+                    RaisedButton(
+                      color: Colors.red,
+                      child: Text('Cancel'),
+                      onPressed: (){
+                        Navigator.pop(context);
+                      },
+                    )
+                  ]
+              )
+            ],
+          );
+        });
+  }
+
 }
 // Start _ShowDetailsPageState
