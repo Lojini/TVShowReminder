@@ -42,36 +42,39 @@ class _TvShowListState extends State<TvShowList>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageTheme().pageTheme('TV Shows', context,null,
-        new Column(
-            children: <Widget>[
-             new Container(
-             color: Theme.of(context).primaryColor,
-              child: new Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: new Card(
-                  child: new ListTile(
-                   leading: new Icon(Icons.search),
-                   title: new TextField(
-                   controller: controller,
-                   decoration: new InputDecoration(
-                    hintText: 'Search', border: InputBorder.none),
-                    onChanged: onSearchTextChanged,
+        body: PageTheme().pageTheme('TV Shows', context,true,
+            new Padding(
+              padding: EdgeInsets.only(left: 10.0, right: 5.0, top: 10),
+              child: Column(
+                  children: <Widget>[
+                    new Container(
+                      child: new Padding(
+                        padding: EdgeInsets.only(left: 10.0, right: 5.0, top: 10),
+                        child: new Card(
+                          child: new ListTile(
+                            leading: new Icon(Icons.search),
+                            title: new TextField(
+                              controller: controller,
+                              decoration: new InputDecoration(
+                                  hintText: 'Search', border: InputBorder.none),
+                              onChanged: onSearchTextChanged,
+                            ),
+                            trailing: new IconButton(icon: new Icon(Icons.cancel), onPressed: () {
+                              controller.clear();
+                              onSearchTextChanged('');
+                            },),
+                          ),
+                        ),
+                      ),
+                    ),  new Expanded(
+                        child: _searchResult.length != 0 || controller.text.isNotEmpty
+                            ? listView(_searchResult):listView(_showDetails)
+                    )
+                  ]
               ),
-                    trailing: new IconButton(icon: new Icon(Icons.cancel), onPressed: () {
-                    controller.clear();
-                    onSearchTextChanged('');
-              },),
-            ),
-          ),
-        ),
-      ),  new Expanded(
-        child: _searchResult.length != 0 || controller.text.isNotEmpty
-            ? listView(_searchResult):listView(_showDetails)
-              )
-    ]
-    )
-      )
+
+            )
+        )
     );
   }
 
@@ -85,7 +88,7 @@ class _TvShowListState extends State<TvShowList>{
         itemCount: list.length,
         itemBuilder: (BuildContext context, int index){
           return Padding(
-              padding: EdgeInsets.only(left: 20.0, right: 10.0, top: 5),
+              padding: EdgeInsets.only(left: 2.0, right: 2.0, top: 5),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -93,9 +96,9 @@ class _TvShowListState extends State<TvShowList>{
                         child: Row(
                             children: <Widget>[
                               CircleAvatar(
-                                radius: 30,
-                                // Show image
-                                backgroundImage: NetworkImage(list[index].image)
+                                  radius: 30,
+                                  // Show image
+                                  backgroundImage: NetworkImage(list[index].image)
                               ),
 
                               SizedBox(width: 7.0),
@@ -107,7 +110,7 @@ class _TvShowListState extends State<TvShowList>{
                                         "${list[index].showName}",
                                         style: TextStyle(
                                             fontFamily: 'Montserrat',
-                                            fontSize: 11,
+                                            fontSize: 10,
                                             fontWeight: FontWeight.bold
                                         )
                                     ),
@@ -116,7 +119,7 @@ class _TvShowListState extends State<TvShowList>{
                                         "${list[index].networkName}",
                                         style: TextStyle(
                                             fontFamily: 'Montserrat',
-                                            fontSize: 11.0,
+                                            fontSize: 10,
                                             color: Colors.grey
                                         )
                                     )
@@ -168,7 +171,7 @@ class Shows {
         networkName:json['show']['network']==null?'AWS':json['show']['network']['name'],
         showName: json['show']['name'],
         image:json['show']['image']==null?'assets/tv.jpg':json['show']['image']['original'],
-      airstamp:json['airstamp']
+        airstamp:json['airstamp']
     );
   }
 }
