@@ -13,7 +13,7 @@
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="tv_reminder"
+        android:label="RemindIT"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
