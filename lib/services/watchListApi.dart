@@ -1,17 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tv_reminder/models/watchList.dart';
 
 class WatchListAPI{
   static Stream<QuerySnapshot> watchlistStream = Firestore.instance.collection('watchlist').snapshots();
   static CollectionReference reference = Firestore.instance.collection('watchlist');
 
-  static addToWatchlist(int id,String showName,String url,DateTime dateTime,String reminder){
+  static addToWatchlist(WatchList watchList){
     Firestore.instance.runTransaction((Transaction transaction) async{
       await reference.add({
-        "showId":id,
-         "showName":showName,
-        "imageUrl":url,
-        "dateTime":dateTime,
-        "reminder":reminder
+        "showId":watchList.showId,
+         "showName":watchList.showName,
+        "imageUrl":watchList.imageUrl,
+        "dateTime":watchList.showDateTime,
+        "reminder":watchList.reminder
       });
     });
   }
@@ -33,4 +34,5 @@ class WatchListAPI{
       });
     });
   }
+
 }

@@ -8,7 +8,7 @@ class WatchList{
   DateTime showDateTime;
   DocumentReference reference;
 
-  WatchList({this.showId,this.showName,this.imageUrl,this.reminder});
+  WatchList({this.showId,this.showName,this.imageUrl,this.showDateTime,this.reminder});
 
   WatchList.fromMap(Map<String,dynamic> map,{this.reference}):
         assert(map['showName']!=null),
