@@ -12,8 +12,8 @@ class BottomNavigationBarPage extends StatefulWidget {
 }
 
 class _BottomNavigationBarState extends State<BottomNavigationBarPage> {
-  int _currentIndex=0;
-  final List<Widget> _children=[
+  int _currentIndex = 0;
+  final List<Widget> _children = [
     WatchListPage(),
     TvShowList(),
     ReminderPage(),
@@ -23,23 +23,32 @@ class _BottomNavigationBarState extends State<BottomNavigationBarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        bottomNavigationBar: CurvedNavigationBar(
-          height: 50,
-          color: Colors.white,
-          backgroundColor: Color(0xFF00ACC1),
-          items: <Widget>[
-            Icon(Icons.list,size: 30,),
-            Icon(Icons.tv,size: 30,),
-            Icon(Icons.history,size: 30),
-            Icon(Icons.help_outline,size: 30,)
-          ],
-          onTap: (int index)=>{
-            setState((){
-              this._currentIndex=index;
-            })
-          },
-        ),
-        body:_children[_currentIndex],
+      bottomNavigationBar: CurvedNavigationBar(
+        height: 50,
+        color: Colors.white,
+        backgroundColor: Color(0xFF00ACC1),
+        items: <Widget>[
+          Icon(
+            Icons.list,
+            size: 30,
+          ),
+          Icon(
+            Icons.tv,
+            size: 30,
+          ),
+          Icon(Icons.history, size: 30),
+          Icon(
+            Icons.help_outline,
+            size: 30,
+          )
+        ],
+        onTap: (int index) => {
+          setState(() {
+            this._currentIndex = index;
+          })
+        },
+      ),
+      body: _children[_currentIndex],
     );
   }
 }

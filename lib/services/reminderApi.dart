@@ -3,7 +3,6 @@ import 'package:tv_reminder/models/reminder.dart';
 
 class ReminderAPI{
     static Stream<QuerySnapshot> reminderStream = Firestore.instance.collection('reminder').snapshots();
-
     static CollectionReference reference = Firestore.instance.collection('reminder');
 
     static addReminder(Reminder reminder){
