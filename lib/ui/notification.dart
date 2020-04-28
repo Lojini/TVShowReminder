@@ -27,13 +27,6 @@ class NotificationManager {
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: onSelectNotification);
   }
-//  scheduleReminder(String name,DateTime dateTime,int reminder) async {
-//    int notificationId = await ScheduledNotifications.scheduleNotification(
-//        new DateTime.now().add(new Duration(seconds: 5)).millisecondsSinceEpoch,
-//        "Ticker text",
-//        "Content title",
-//        "Content");
-//  }
   scheduleReminder(String name,DateTime dateTime,int reminder) async {
     String time = DateFormat.jm().format(dateTime).toString();
     var scheduledNotificationDateTime =
