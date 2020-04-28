@@ -44,13 +44,15 @@ class _TvShowListState extends State<TvShowList>{
     return Scaffold(
         body: PageTheme().pageTheme('TV Shows', context,true,
             new Padding(
-              padding: EdgeInsets.only(left: 10.0, right: 5.0, top: 10),
+              padding: EdgeInsets.only(left: 5.0, right: 10.0, top: 10, bottom: 10),
               child: Column(
                   children: <Widget>[
                     new Container(
+                      // Search bar
                       child: new Padding(
-                        padding: EdgeInsets.only(left: 10.0, right: 5.0, top: 10),
+                        padding: EdgeInsets.only(left: 15.0, right: 5.0, top: 10),
                         child: new Card(
+                          color: Color(0xFFE0F7FA),
                           child: new ListTile(
                             leading: new Icon(Icons.search),
                             title: new TextField(
@@ -72,12 +74,11 @@ class _TvShowListState extends State<TvShowList>{
                     )
                   ]
               ),
-
-            )
-        )
+            )        )
     );
   }
 
+  // Start tvShowlist content
   Widget listView(List<Shows> list){
     return new ListView.separated(
         separatorBuilder:(context,builder) =>Divider(
@@ -92,41 +93,44 @@ class _TvShowListState extends State<TvShowList>{
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Container(
+                    Flexible(
+                      child: Container(
                         child: Row(
-                            children: <Widget>[
-                              CircleAvatar(
-                                  radius: 30,
-                                  // Show image
-                                  backgroundImage: NetworkImage(list[index].image)
-                              ),
 
-                              SizedBox(width: 7.0),
-                              Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children:[
-                                    // Show Name
-                                    Text(
-                                        "${list[index].showName}",
-                                        style: TextStyle(
-                                            fontFamily: 'Montserrat',
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.bold
-                                        )
-                                    ),
-                                    // Show Network
-                                    Text(
-                                        "${list[index].networkName}",
-                                        style: TextStyle(
-                                            fontFamily: 'Montserrat',
-                                            fontSize: 10,
-                                            color: Colors.grey
-                                        )
-                                    )
-                                  ]
-                              )
-                            ]
-                        )),
+                          children: <Widget>[
+                            CircleAvatar(
+                                radius: 30,
+                                // Show image
+                                backgroundImage: NetworkImage(list[index].image)
+                            ),
+                            SizedBox(width: 7.0),
+                            Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children:[
+                                  // Show Name
+                                  Text(
+                                      "${list[index].showName}",
+                                      style: TextStyle(
+                                          fontFamily: 'Montserrat',
+                                          fontSize: 8,
+                                          fontWeight: FontWeight.bold
+                                      )
+                                  ),
+                                  // Show Network
+                                  Text(
+                                      "${list[index].networkName}",
+                                      style: TextStyle(
+                                          fontFamily: 'Montserrat',
+                                          fontSize: 10,
+                                          color: Colors.grey
+                                      )
+                                  )
+                                ]
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                     IconButton(
                         icon: Icon(Icons.arrow_forward_ios,color: Colors.grey,size: 20,),
                         color: Colors.black,
@@ -143,6 +147,9 @@ class _TvShowListState extends State<TvShowList>{
         }
     );
   }
+  // End tvShowlist content
+
+  // Search function
   onSearchTextChanged(String text) async {
     _searchResult.clear();
     if (text.isEmpty) {
@@ -158,7 +165,9 @@ class _TvShowListState extends State<TvShowList>{
     setState(() {});
   }
 }
+// End _TvShowListState
 
+// Start Show class
 class Shows {
   final String showName,airstamp,image,networkName;
   final int id;
@@ -175,5 +184,5 @@ class Shows {
     );
   }
 }
-// End _TvShowListState
+// End Show class
 

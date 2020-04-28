@@ -114,7 +114,7 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
               ),
               SizedBox(width: 10.0,),
               Positioned(
-                top: 145.0,
+                top: 130.0,
                 left: 25.0,
                 right: 25.0,
                   child: Column(
@@ -181,7 +181,7 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
 
               //Add show into watchlist
               Positioned(
-                  top: 450.0,
+                  top: 430.0,
                   left: 80.0,
                   right: 80.0,
                   child: Container(

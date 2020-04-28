@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
               fontFamily: 'Montserrat'
           )
         ),
-        accentColor: Color(0xFF6cc3c1),
+        accentColor: Color(0xFF4DD0E1),
         primaryColor: Color(0xFF00ACC1)
       ),
       home: Splash(),
