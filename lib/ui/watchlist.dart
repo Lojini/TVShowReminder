@@ -104,7 +104,7 @@ class _WatchListPageState extends State<WatchListPage> {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ShowDetailsPage(
                       id: list['showId'],
-                      airStamp: showDateTime.toDate(),
+                      airStamp: list['dateTime'].toDate(),
                     )));
             break;
           case MoreOptions.addReminder:
