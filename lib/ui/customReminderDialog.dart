@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:tv_reminder/models/reminder.dart';
 import 'package:tv_reminder/services/reminderApi.dart';
 import 'package:tv_reminder/services/watchListApi.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'notification.dart';
 
@@ -183,6 +184,7 @@ class _CustomReminderDialogState extends State<CustomReminderDialog> {
                                 widget.reminder.reminderStart != null) {
                               ReminderAPI.updateReminder(
                                   widget.documentId, dropdownValue);
+                              showToast('Updated successfully');
                               Navigator.pop(context);
                             } else {
                               int remind;
@@ -213,6 +215,7 @@ class _CustomReminderDialogState extends State<CustomReminderDialog> {
                                   remind);
                               WatchListAPI.updateWatchlist(
                                   widget.documentId, true);
+                              showToast('Added successfully');
                               Navigator.pop(context);
                             }
                           },
@@ -264,6 +267,17 @@ class _CustomReminderDialogState extends State<CustomReminderDialog> {
               )),
         ],
       ),
+    );
+  }
+  void showToast(String text){
+    Fluttertoast.showToast(
+        msg: text,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.grey[100],
+        textColor: Colors.grey[600],
+        fontSize: 16.0
     );
   }
 }

@@ -162,7 +162,7 @@ class _TvShowListState extends State<TvShowList> {
     }
 
     _showDetails.forEach((show) {
-      if (show.showName.contains(text)) _searchResult.add(show);
+      if (show.networkName.contains(text)) _searchResult.add(show);
     });
 
     setState(() {});
