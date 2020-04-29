@@ -4,9 +4,9 @@ import '../main.dart';
 import 'package:folding_cell/folding_cell.dart';
 
 // Start HelpPage
-class HelpPage extends StatefulWidget{
+class HelpPage extends StatefulWidget {
   @override
-  _HelpPageState createState()=> _HelpPageState();
+  _HelpPageState createState() => _HelpPageState();
 }
 // End HelpPage
 
