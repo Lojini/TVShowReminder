@@ -42,7 +42,7 @@ class _TvShowListState extends State<TvShowList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: PageTheme().pageTheme('TV Shows', context,true,
+        body: PageTheme().pageTheme('TV Shows', context,false,
             new Padding(
               padding: EdgeInsets.only(left: 5.0, right: 10.0, top: 10, bottom: 10),
               child: Column(
@@ -52,7 +52,7 @@ class _TvShowListState extends State<TvShowList> {
                       child: new Padding(
                         padding: EdgeInsets.only(left: 15.0, right: 5.0, top: 10),
                         child: new Card(
-                          color: Color(0xFFE0F7FA),
+                          color: Colors.grey[100],
                           child: new ListTile(
                             leading: new Icon(Icons.search),
                             title: new TextField(
@@ -85,18 +85,17 @@ class _TvShowListState extends State<TvShowList> {
               color: Colors.grey,
               thickness: 0.5,
             ),
-        padding: EdgeInsets.only(top: 30.0, left: 10.0, bottom: 20),
+        padding: EdgeInsets.only(top: 30.0, left: 30.0, bottom: 20),
         itemCount: list.length,
         itemBuilder: (BuildContext context, int index) {
           return Padding(
-              padding: EdgeInsets.only(left: 2.0, right: 2.0, top: 5),
+              padding: EdgeInsets.only(left: 2.0, right: 4.0, top: 5),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Flexible(
                       child: Container(
                         child: Row(
-
                           children: <Widget>[
                             CircleAvatar(
                                 radius: 30,

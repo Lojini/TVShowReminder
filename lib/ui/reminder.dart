@@ -39,7 +39,9 @@ class _ReminderState extends State<ReminderPage> {
   //build each item in the list
   Widget buildListItem(BuildContext context, DocumentSnapshot data) {
     final reminder = Reminder.fromSnapshot(data);
-    return new Slidable(
+    return Column(
+      children:[
+      new Slidable(
       delegate: new SlidableDrawerDelegate(),
       actionExtentRatio: 0.20,
       secondaryActions: <Widget>[
@@ -79,9 +81,8 @@ class _ReminderState extends State<ReminderPage> {
         ),
       ],
       child: Container(
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.only(left: 20,top: 8),
         child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Container(
                 child: Row(children: <Widget>[
@@ -101,7 +102,7 @@ class _ReminderState extends State<ReminderPage> {
                             reminder.showName,
                             style: TextStyle(
                                 fontFamily: 'Montserrat',
-                                fontSize: 14.0,
+                                fontSize: 11.5,
                                 fontWeight: FontWeight.bold),
                           ),
                           SizedBox(
@@ -122,15 +123,16 @@ class _ReminderState extends State<ReminderPage> {
                                       color: Colors.grey)),
                             ],
                           ),
+                          SizedBox(height: 8,)
                         ]),
                   ),
-                  SizedBox(
-                    height: 15,
-                  ),
                 ]),
-              )
+              ),
             ]),
       ),
+    ),
+        Divider(color: Colors.grey[300],thickness: 1.0,),
+    ]
     );
   }
 
