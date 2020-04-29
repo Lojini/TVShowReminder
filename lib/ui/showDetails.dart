@@ -103,51 +103,116 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
     checkExists(name);
     checkIfReminderExists(name);
     return Scaffold(
-        //Start body
-        body: PageTheme().pageTheme(
-            '$name',
-            context,
-            true,
-            ListView(children: [
-              Stack(children: [
-                Container(
-                    height: MediaQuery.of(context).size.height - 82.0,
-                    width: MediaQuery.of(context).size.width,
-                    color: Colors.transparent),
-                Positioned(
-                    top: 13.0,
-                    left: (MediaQuery.of(context).size.width / 2) - 60.0,
-                    child: Container(
-                        //Show image
-                        child: CircleAvatar(
-                          radius: 30,
-                          backgroundImage: image != null
-                              ? NetworkImage(image)
-                              : AssetImage("assets/tv.jpg"),
+      //Start body
+        body: PageTheme().pageTheme('$name', context,true,
+        ListView(children: [
+            Stack(children: [
+              Container(
+                height: MediaQuery.of(context).size.height - 82.0,
+                width: MediaQuery.of(context).size.width,
+                color: Colors.transparent),
+              Positioned(
+                  top: 5.0,
+                  left: (MediaQuery.of(context).size.width / 2) - 60.0,
+                  child: Container(
+                    //Show image
+                      child: CircleAvatar(
+                        radius: 30,
+                        backgroundImage: image != null ?
+                        NetworkImage(image)
+                            :AssetImage("assets/tv.jpg"),
+                      ),
+                          height: 130.0,
+                          width: 130.0)
+
+              ),
+              SizedBox(width: 10.0,),
+              Positioned(
+                top: 130.0,
+                left: 25.0,
+                right: 25.0,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                      children:[
+                        Align(
+                          heightFactor: 2,
+                          alignment: Alignment.center,
+                         child:SmoothStarRating(
+                          rating: rating,
+                          allowHalfRating: false,
+                          filledIconData: Icons.star,
+                          halfFilledIconData: Icons.star_half,
+                          color: Colors.amber,
+                          size: 30,
+                          borderColor: Colors.amber,
                         ),
-                        height: 130.0,
-                        width: 130.0)),
-                SizedBox(
-                  width: 10.0,
-                ),
-                Positioned(
-                    top: 145.0,
-                    left: 25.0,
-                    right: 25.0,
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Align(
-                            heightFactor: 2,
-                            alignment: Alignment.center,
-                            child: SmoothStarRating(
-                              rating: rating,
-                              allowHalfRating: false,
-                              filledIconData: Icons.star,
-                              halfFilledIconData: Icons.star_half,
-                              color: Colors.amber,
-                              size: 30,
-                              borderColor: Colors.amber,
+                        ),
+                        SizedBox(height: 20,),
+                        Text("Name: $name \n",
+                            style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 13.0,
+                                fontWeight: FontWeight.bold
+                            )
+                        ),
+                        // Show Date
+                        Text("Start date: $date \n",
+                            style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 13.0,
+                                fontWeight: FontWeight.bold
+                            )
+                        ),
+                        // Show time
+                        Text("Start time: $time \n",
+                            style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 13.0,
+                                fontWeight: FontWeight.bold
+                            )
+                        ),
+                        // Show Country
+                        Text("Country: $country \n",
+                            style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 13.0,
+                                fontWeight: FontWeight.bold
+                            )
+                        ),
+                        // Show Network
+                        Text("Network: $network \n",
+                            style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 13.0,
+                                fontWeight: FontWeight.bold
+                            )
+                        ),
+
+                      ]
+
+                  )
+              ),
+
+              //Add show into watchlist
+              Positioned(
+                  top: 430.0,
+                  left: 80.0,
+                  right: 80.0,
+                  child: Container(
+                    height: 50.0,
+                    child: RaisedButton(
+                      onPressed: showExists?() {
+                    _confirmDialog(context,"Are you sure you want to remove this show from the list?\n\nReminder for this show will be deleted",true);
+                     }:(){
+                    _confirmDialog(context,'Do you want to add this show to your watch list?',false);
+                     },
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
+                      padding: EdgeInsets.all(0.0),
+                      child: Ink(
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(colors: [Color(0xFF00ACC1), Color(0xFF80DEEA)],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
                             ),
                           ),
                           SizedBox(

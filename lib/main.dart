@@ -11,14 +11,24 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-          textTheme: TextTheme(
-              title: TextStyle(color: Colors.black, fontFamily: 'Montserrat'),
-              body1: TextStyle(color: Colors.black, fontFamily: 'Montserrat'),
-              subtitle:
-                  TextStyle(color: Colors.grey, fontFamily: 'Montserrat')),
-          accentColor: Color(0xFF6cc3c1),
-          primaryColor: Color(0xFF00ACC1)),
+      theme:ThemeData(
+        textTheme: TextTheme(
+          title: TextStyle(
+            color: Colors.black,
+              fontFamily: 'Montserrat'
+          ),
+          body1: TextStyle(
+              color: Colors.black,
+              fontFamily: 'Montserrat'
+          ),
+          subtitle: TextStyle(
+            color: Colors.grey,
+              fontFamily: 'Montserrat'
+          )
+        ),
+        accentColor: Color(0xFF4DD0E1),
+        primaryColor: Color(0xFF00ACC1)
+      ),
       home: Splash(),
       routes: <String, WidgetBuilder>{
         '/Home': (BuildContext context) => new BottomNavigationBarPage()
