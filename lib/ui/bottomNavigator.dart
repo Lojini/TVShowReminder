@@ -36,7 +36,7 @@ class _BottomNavigationBarState extends State<BottomNavigationBarPage> {
             Icons.tv,
             size: 30,
           ),
-          Icon(Icons.history, size: 30),
+          Icon(Icons.alarm, size: 30),
           Icon(
             Icons.help_outline,
             size: 30,

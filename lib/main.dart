@@ -69,14 +69,14 @@ class PageTheme {
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 25),
+                        fontSize: 20),
                   ),
                 ),
               ],
             ),
           ),
           Container(
-              height: MediaQuery.of(context).size.height - 190.0,
+              height: MediaQuery.of(context).size.height - 182.0,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(75.0)),
