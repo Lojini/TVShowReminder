@@ -4,6 +4,7 @@ import 'package:tv_reminder/models/watchList.dart';
 import 'package:tv_reminder/services/reminderApi.dart';
 import 'package:tv_reminder/services/watchListApi.dart';
 import 'package:tv_reminder/ui/notification.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ConfirmationDialog extends StatefulWidget {
   final String reminderDocumentId;
@@ -49,15 +50,18 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
                   WatchListAPI.deleteWatchlist(widget.watchlistDocumentId);
                   ReminderAPI.deleteReminder(widget.reminderDocumentId);
                   manager.removeReminder(1234);
+                  showToast('Deleted successfully');
                   Navigator.pop(context);
                 } else if (widget.pageName == 'Reminder') {
                   ReminderAPI.deleteReminder(widget.reminderDocumentId);
                   WatchListAPI.updateWatchlist(
                       widget.watchlistDocumentId, false);
+                  showToast('Deleted successfully');
                   Navigator.pop(context);
                 }
               } else if (widget.action == 'add') {
                 WatchListAPI.addToWatchlist(widget.watchList);
+                showToast('Added successfully');
                 Navigator.pop(context);
               }
             },
@@ -74,6 +78,17 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
           )
         ])
       ],
+    );
+  }
+  void showToast(String text){
+    Fluttertoast.showToast(
+        msg: text,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.grey[100],
+        textColor: Colors.grey[600],
+        fontSize: 16.0
     );
   }
 }

@@ -32,17 +32,15 @@ class NotificationManager {
     var scheduledNotificationDateTime =
     dateTime.subtract(Duration(minutes: reminder));
     var scheduledNotificationDateTimeNow = DateTime.now().add(Duration(seconds: 10));
-    var vibrationPattern = Int64List(4);
-    vibrationPattern[0] = 0;
-    vibrationPattern[1] = 1000;
-    vibrationPattern[2] = 5000;
-    vibrationPattern[3] = 2000;
 
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'your show id',
       'show name',
       'time',
+      ticker: 'Tv Show Reminder',
       sound: RawResourceAndroidNotificationSound('sound'),
+      importance: Importance.Max,
+      priority: Priority.High
     );
     var iOSPlatformChannelSpecifics =
     IOSNotificationDetails();
@@ -50,7 +48,7 @@ class NotificationManager {
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.schedule(
         1234,
-        name,
+        '$name',
         'Today at $time',
         scheduledNotificationDateTimeNow,
         platformChannelSpecifics);
