@@ -19,10 +19,8 @@ class _TvShowListState extends State<TvShowList> {
   List<Shows> _showDetails = [];
 
   Future getData() async {
-    // API Connection
-    http.Response response =
-        await http.get("http://api.tvmaze.com/schedule?date=2020-04-30");
-    //debugPrint(response.body);
+    // Fetch the TV shows data from API
+    http.Response response = await http.get("http://api.tvmaze.com/schedule?date=2020-04-30");
     final data = json.decode(response.body);
     setState(() {
       for (Map show in data) {
@@ -59,6 +57,7 @@ class _TvShowListState extends State<TvShowList> {
                               controller: controller,
                               decoration: new InputDecoration(
                                   hintText: 'Search', border: InputBorder.none),
+                              // call onSearchTextChanged() function
                               onChanged: onSearchTextChanged,
                             ),
                             trailing: new IconButton(icon: new Icon(Icons.cancel), onPressed: () {
@@ -68,13 +67,16 @@ class _TvShowListState extends State<TvShowList> {
                           ),
                         ),
                       ),
-                    ),  new Expanded(
+                    ),
+                    // Search shows details displaying
+                    new Expanded(
                         child: _searchResult.length != 0 || controller.text.isNotEmpty
                             ? listView(_searchResult):listView(_showDetails)
                     )
                   ]
               ),
-            )        )
+            )
+        )
     );
   }
 
@@ -149,22 +151,18 @@ class _TvShowListState extends State<TvShowList> {
                   ]));
         });
   }
-
-  // End tvShowlist content
+  // End TV Showlist content
 
   // Search function
-
   onSearchTextChanged(String text) async {
     _searchResult.clear();
     if (text.isEmpty) {
       setState(() {});
       return;
     }
-
     _showDetails.forEach((show) {
       if (show.networkName.contains(text)) _searchResult.add(show);
     });
-
     setState(() {});
   }
 }
@@ -177,7 +175,9 @@ class Shows {
 
   Shows({this.id, this.showName, this.image, this.airstamp, this.networkName});
 
+
   factory Shows.fromJson(Map<String, dynamic> json) {
+    //set API's data into variables
     return new Shows(
         id: json['show']['id'],
         networkName: json['show']['network'] == null

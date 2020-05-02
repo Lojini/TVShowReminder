@@ -147,7 +147,7 @@ class _CustomReminderDialogState extends State<CustomReminderDialog> {
                                 fontSize: 12.0,
                               )),
                           SizedBox(
-                            width: 10,
+                            width: 5,
                           ),
                           DropdownButton<String>(
                             value: dropdownValue,
@@ -158,7 +158,13 @@ class _CustomReminderDialogState extends State<CustomReminderDialog> {
                               '1 hour'
                             ].map((String value) {
                               return new DropdownMenuItem(
-                                  value: value, child: new Text(value));
+                                  value: value,
+                                  child: new Text(value,
+                                    style: TextStyle(
+                                      fontSize: 7.0,
+                                    )
+                                  )
+                              );
                             }).toList(),
                             onChanged: (value) {
                               setState(() {
@@ -271,7 +277,7 @@ class _CustomReminderDialogState extends State<CustomReminderDialog> {
             ),
           ),
           Positioned(
-              left: 110,
+              left: 80,
               child: Container(
                 padding: EdgeInsets.all(2),
                 decoration: BoxDecoration(
