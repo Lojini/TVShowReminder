@@ -1,3 +1,9 @@
+/* Splash screen of the application.
+   This screen shows the app name with its tagline and an animated gif.
+   Reference:
+     to hold the splash screen for few seconds:
+        https://stackoverflow.com/questions/50129761/flutter-hold-splash-screen-for-3-seconds-how-to-implement-splash-screen-in-flut
+ */
 import 'dart:async';
 import 'package:flutter/material.dart';
 

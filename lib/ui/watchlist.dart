@@ -1,3 +1,11 @@
+/*  This page displays the Favourite tv shows fetched from watchlist document in firestore.
+    Swiper is used to display the shows. Button placed at the right corner of a tv show card
+    opens a popup menu button to handle navigation to details page,reminder and deletion of a show from watchlist
+    Reference :
+        https://pub.dev/packages/flutter_swiper
+        https://codelabs.developers.google.com/codelabs/flutter-firebase/#8
+        for popup menu: https://flutteropen.gitbook.io/flutter-widgets/flutter-widgets-14-flutter-popup-menu-button
+ */
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,14 +23,15 @@ class WatchListPage extends StatefulWidget {
   _WatchListPageState createState() => _WatchListPageState();
 }
 
+//enumeration with the list of options to be in popup menu
 enum MoreOptions { info, remove, addReminder, updateReminder }
 
 class _WatchListPageState extends State<WatchListPage> {
-  bool isButtonDisabled = false;
   Map data;
   String date, time, timeZone, reminderId, showName, imageUrl, reminderStart;
   Timestamp showDateTime;
 
+  //check if a reminder exists for given show name
   checkIfReminderExists(String name) async {
     QuerySnapshot query = await ReminderAPI.reference
         .where('name', isEqualTo: name)
@@ -81,7 +90,7 @@ class _WatchListPageState extends State<WatchListPage> {
               },
             )));
   }
-
+  //pop up menu with options
   Widget popUpMenu(bool isExists, var list) {
     checkIfReminderExists(list['showName']);
     return new PopupMenuButton<MoreOptions>(
@@ -101,6 +110,7 @@ class _WatchListPageState extends State<WatchListPage> {
       onSelected: (value) {
         switch (value) {
           case MoreOptions.info:
+            //navigate to Show's detail page
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ShowDetailsPage(
                       id: list['showId'],
@@ -108,6 +118,7 @@ class _WatchListPageState extends State<WatchListPage> {
                     )));
             break;
           case MoreOptions.addReminder:
+            //open the dialog to set reminder
             showDialog(
               context: context,
               builder: (context) => CustomReminderDialog(
@@ -119,6 +130,7 @@ class _WatchListPageState extends State<WatchListPage> {
             );
             break;
           case MoreOptions.updateReminder:
+            //open the dialog to update reminder
             showDialog(
               context: context,
               builder: (context) => CustomReminderDialog(
@@ -131,6 +143,7 @@ class _WatchListPageState extends State<WatchListPage> {
             );
             break;
           case MoreOptions.remove:
+            //opens the alert dialog to delete a show from watchlist
             showDialog(
                 context: context,
                 builder: (context) {
@@ -158,6 +171,8 @@ class _WatchListPageState extends State<WatchListPage> {
                   style: TextStyle(fontSize: 12),
                 ),
                 contentPadding: EdgeInsets.zero)),
+        //if the show doesn't have a reminder,then the option in popmenu shows "add reminder"
+        //else shows "edit reminder"
         list['reminder'] == true
             ? const PopupMenuItem<MoreOptions>(
                 value: MoreOptions.updateReminder,
@@ -189,6 +204,7 @@ class _WatchListPageState extends State<WatchListPage> {
     );
   }
 
+  //to display when watchlist is empty
   Widget emptyPage() {
     return Container(
       child: Column(
