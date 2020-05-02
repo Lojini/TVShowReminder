@@ -45,7 +45,7 @@ class _HelpPageState extends State<HelpPage>{
                     SimpleFoldingCell(
                         key: _foldingCellKey2,
                         frontWidget: _buildFrontWidget(_foldingCellKey2, "How Do I Follow \na Show ?"),
-                        innerTopWidget: _buildInnerTopWidget("1. Tap the title of the show. \n\n2. There will be a blue botton at the bottom \n    of the page that says 'Add to Watchlist. \n\n3.Tap the button to follow thw show.'"),
+                        innerTopWidget: _buildInnerTopWidget("1. Tap the title of the show. \n\n2. There will be a blue botton at the bottom \n    of the page that says 'Add to Watchlist. \n\n3.Tap the button to follow thw show."),
                         innerBottomWidget: _buildInnerBottomWidget(_foldingCellKey2),
                         cellSize: Size(MediaQuery.of(context).size.width, 125),
                         padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 15.0, bottom: 10.0),
@@ -115,6 +115,7 @@ class _HelpPageState extends State<HelpPage>{
     );
   }
 
+  // Folding Cells front Widget.IT display help question
   Widget _buildFrontWidget(GlobalKey<SimpleFoldingCellState> key, String title) {
     return Container(
         color: Color(0xFFB2EBF2),
@@ -142,6 +143,7 @@ class _HelpPageState extends State<HelpPage>{
     );
   }
 
+  // Folding Cells Top Widget. IT display details about help question
   Widget _buildInnerTopWidget(String title) {
     return Container(
         color: Color(0xFF4DD0E1),
@@ -154,6 +156,7 @@ class _HelpPageState extends State<HelpPage>{
                 fontWeight: FontWeight.w800)));
   }
 
+  // Folding Cells Bottom Widget
   Widget _buildInnerBottomWidget(GlobalKey<SimpleFoldingCellState> key) {
     return Container(
       color: Color(0xFFE0F7FA),

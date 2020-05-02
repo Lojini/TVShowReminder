@@ -35,7 +35,7 @@ class _ShowDetailsPageState extends State<ShowDetailsPage> {
   var date, time;
 
   Future getData(int showId) async {
-    //API Connection
+    // Fetch the TV shows data from API
     http.Response response =
         await http.get("http://api.tvmaze.com/shows/$showId");
     //debugPrint(response.body);
