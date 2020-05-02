@@ -1,4 +1,8 @@
-import 'dart:typed_data';
+/*  This file contains the class for flutter local notification
+    Schedules the notification in given time and date
+    References:
+       https://github.com/musabagab/MedicineReminder
+ */
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 
@@ -15,7 +19,8 @@ class NotificationManager {
   }
 
   void initNotifications() {
-    // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+    // initialise the plugin.
+    //app icon has been added as drawable resource in android
     var initializationSettingsAndroid =
     new AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettingsIOS = IOSInitializationSettings(
@@ -28,33 +33,34 @@ class NotificationManager {
         onSelectNotification: onSelectNotification);
   }
   scheduleReminder(String name,DateTime dateTime,int reminder) async {
+    //convert the time to 12 hours clock to show in the notification
     String time = DateFormat.jm().format(dateTime).toString();
+    //subtract the reminder time from the show time
     var scheduledNotificationDateTime =
     dateTime.subtract(Duration(minutes: reminder));
-    var scheduledNotificationDateTimeNow = DateTime.now().add(Duration(seconds: 10));
 
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+    var androidPlatformSpecifics = AndroidNotificationDetails(
       'your show id',
       'show name',
       'time',
       ticker: 'Tv Show Reminder',
+      //sound file has been added as raw in resource directory of android
       sound: RawResourceAndroidNotificationSound('sound'),
       importance: Importance.Max,
       priority: Priority.High
     );
-    var iOSPlatformChannelSpecifics =
+    var iOSPlatformSpecifics =
     IOSNotificationDetails();
-    var platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    var platformSpecifics = NotificationDetails(
+        androidPlatformSpecifics, iOSPlatformSpecifics);
     await flutterLocalNotificationsPlugin.schedule(
         1234,
         '$name',
         'Today at $time',
-        scheduledNotificationDateTimeNow,
-        platformChannelSpecifics);
+        scheduledNotificationDateTime,
+        platformSpecifics);
   }
   Future onSelectNotification(String payload) async {
-    print('Notification clicked');
     return Future.value(0);
   }
 

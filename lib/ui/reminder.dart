@@ -1,3 +1,9 @@
+/* This page shows the reminder list and
+   each item in the list can be dragged to left for more options.
+   References:
+      https://codelabs.developers.google.com/codelabs/flutter-firebase/#8
+      https://pub.dev/packages/flutter_slidable
+ */
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +28,7 @@ class _ReminderState extends State<ReminderPage> {
           if (!snapshot.hasData || snapshot.data == null)
             return CircularProgressIndicator();
           else if (snapshot.data.documents.length == 0)
+            //if list has reminders to show,
             return emptyPage();
           else
             return buildList(context, snapshot.data.documents);
@@ -50,6 +57,7 @@ class _ReminderState extends State<ReminderPage> {
           color: Colors.grey[100],
           icon: Icons.edit,
           onTap: () {
+            //open custom dialog to update reminder
             showDialog(
               context: context,
               builder: (context) => CustomReminderDialog(
@@ -67,6 +75,7 @@ class _ReminderState extends State<ReminderPage> {
           color: Colors.red,
           icon: Icons.delete,
           onTap: () {
+            //shows the alert dialog before deleting reminder
             showDialog(
                 context: context,
                 builder: (context) {
@@ -116,6 +125,8 @@ class _ReminderState extends State<ReminderPage> {
                                 size: 20,
                               ),
                               Text(
+                                   //convert the date format to Month,date year and time format to 12 hours clock
+                                   //displays the time that reminder notification set
                                   '${DateFormat.yMMMMd("en_US").add_jm().format(reminder.showDateTime.toDate().subtract(Duration(minutes: int.parse(reminder.reminderStart.split(" ")[0]))))}',
                                   style: TextStyle(
                                       fontFamily: 'Montserrat',
@@ -176,5 +187,6 @@ class _ReminderState extends State<ReminderPage> {
     return Scaffold(
         body: PageTheme()
             .pageTheme('Reminder', context, null, buildBody(context)));
+
   }
 }

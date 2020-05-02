@@ -1,3 +1,8 @@
+/* Created a reusable widget to use in all the pages
+   the reusable widget is to create a curved design
+   Reference:
+     for curved design : https://www.youtube.com/watch?v=K1uH_SN4X0w&feature=youtu.be
+ */
 import 'package:flutter/material.dart';
 import 'ui/splash.dart';
 import 'ui/bottomNavigator.dart';

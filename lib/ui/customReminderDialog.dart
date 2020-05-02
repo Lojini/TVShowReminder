@@ -1,3 +1,10 @@
+/* Separated widget file to reuse the dialog
+   This file contains the code of Dialog box for adding and updating a reminder
+   Used toast message to prompt after adding or updating
+   References:
+     for custom dialog: https://medium.com/@excogitatr/custom-dialog-in-flutter-d00e0441f1d5
+     for drop down menu :https://medium.com/@naumanahmed19/flutter-dropdown-validation-357ef05d1788
+ */
 import 'dart:core';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -6,14 +13,14 @@ import 'package:tv_reminder/models/reminder.dart';
 import 'package:tv_reminder/services/reminderApi.dart';
 import 'package:tv_reminder/services/watchListApi.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import 'notification.dart';
 
 class CustomReminderDialog extends StatefulWidget {
-  final Reminder reminder;
-  final String documentId;
-  final Timestamp showDateTime;
+  final Reminder reminder;//reminder object
+  final String documentId;//documentId of watchlist or reminder
+  final Timestamp showDateTime;//Date and time of show
 
+  //constructor
   CustomReminderDialog(
       {Key key, this.documentId, this.reminder, this.showDateTime})
       : super(key: key);
@@ -23,9 +30,9 @@ class CustomReminderDialog extends StatefulWidget {
 }
 
 class _CustomReminderDialogState extends State<CustomReminderDialog> {
-  bool _isButtonDisabled = true;
+  bool _isButtonDisabled = true;//to enable or disable the button in dialog
   String dropdownValue;
-  NotificationManager manager;
+  NotificationManager manager;//notification object
 
   @override
   void initState() {
@@ -37,8 +44,11 @@ class _CustomReminderDialogState extends State<CustomReminderDialog> {
 
   @override
   Widget build(BuildContext context) {
+    //convert the date and time of the show to local timezone from UTC
+    //set the format of date to Month Date, Year
     var date = DateFormat.yMMMMd("en_US")
         .format(widget.reminder.showDateTime.toDate().toLocal());
+    //set the time format in 12 hour clock time
     var time =
         DateFormat.jm().format(widget.reminder.showDateTime.toDate().toLocal());
     return Dialog(
@@ -152,7 +162,9 @@ class _CustomReminderDialogState extends State<CustomReminderDialog> {
                             }).toList(),
                             onChanged: (value) {
                               setState(() {
+                                //set the dropdown value with selected current value
                                 dropdownValue = value;
+                                //button in dialog to add or update gets enabled only if the dropdown value is set
                                 if (widget.reminder.reminderStart !=
                                     dropdownValue)
                                   _isButtonDisabled = false;
@@ -180,6 +192,8 @@ class _CustomReminderDialogState extends State<CustomReminderDialog> {
                     onPressed: _isButtonDisabled
                         ? null
                         : () {
+                           //if reminder time is not empty and already has a value,
+                          // then the dialog opens to update the existing value
                             if (widget.documentId != null &&
                                 widget.reminder.reminderStart != null) {
                               ReminderAPI.updateReminder(
@@ -187,7 +201,7 @@ class _CustomReminderDialogState extends State<CustomReminderDialog> {
                               showToast('Updated successfully');
                               Navigator.pop(context);
                             } else {
-                              int remind;
+                              int remind;//set according to the selected dropdown value
                               ReminderAPI.addReminder(new Reminder(
                                   showName: widget.reminder.showName,
                                   watchlistId: widget.documentId,
@@ -207,6 +221,7 @@ class _CustomReminderDialogState extends State<CustomReminderDialog> {
                                 case '1 hour':
                                   remind = 60;
                               }
+                              //schedule reminder to alert before given time
                               manager.scheduleReminder(
                                   widget.reminder.showName,
                                   widget.reminder.showDateTime
@@ -223,6 +238,7 @@ class _CustomReminderDialogState extends State<CustomReminderDialog> {
                       constraints: BoxConstraints(minHeight: 50, minWidth: 600),
                       alignment: Alignment.center,
                       child: Text(
+                        //condition to change the text on button
                         widget.reminder.reminderStart != null &&
                                 widget.documentId != null
                             ? "Update"
@@ -269,6 +285,7 @@ class _CustomReminderDialogState extends State<CustomReminderDialog> {
       ),
     );
   }
+  //show toast message
   void showToast(String text){
     Fluttertoast.showToast(
         msg: text,
